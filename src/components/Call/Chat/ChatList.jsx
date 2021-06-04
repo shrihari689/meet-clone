@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ToggleButton from "../../Shared/Toggle"
 import SidebarHeader from "../Shared/SidebarHeader";
 import ChatItem from "./ChatItem";
@@ -15,11 +15,12 @@ const ChatList = ({ onClose }) => {
 
     const [messages, setMessages] = useState(MESSAGES);
     const [message, setMessage] = useState("");
-    const chatItems = createRef();
+    const chatItems = useRef();
 
     useEffect(() => {
+        console.log(chatItems.current)
         chatItems.current?.scroll(10000, 10000)
-    }, [messages])
+    }, [messages, chatItems])
 
     const handleSendMessage = (e) => {
         e.preventDefault();

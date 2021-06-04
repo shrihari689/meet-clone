@@ -6,3 +6,16 @@
 .material-icons {
   user-select: none;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-500;
+  @apply rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-800;
+}
