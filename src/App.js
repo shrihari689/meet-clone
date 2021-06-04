@@ -5,6 +5,7 @@ import Time from './components/Shared/Time';
 import PeopleList from './components/Call/People/PeopleList';
 import ChatList from './components/Call/Chat/ChatList';
 import Sidebar from './components/Call/Shared/Sidebar';
+import CopyClipboard from './components/Shared/CopyClipboard';
 
 const App = () => {
 
@@ -38,7 +39,7 @@ const App = () => {
         <div className="flex items-center">
           <Time className="text-xs" />
           <span className="mx-2 font-thin">|</span>
-          <span>obo-qpck-cbz</span>
+          <CopyClipboard text="obo-qpck-cbz" className="cursor-pointer" />
         </div>
         <div className="flex items-center">
           <CallActionButton icon="mic_off" active={true} />
