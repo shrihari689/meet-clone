@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <main className="h-screen w-full flex flex-col justify-between bg-gray-900 overflow-hidden">
-      <div className="w-full h-full flex p-3">
+      <div className="w-full h-screen flex p-3 pb-14">
         <div className="flex-col items-center justify-between flex-1 px-2 flex">
           <div className="w-full flex justify-end">
             <i className="material-icons text-white" style={{ fontSize: '16px' }}>mic_off</i>
@@ -41,7 +41,7 @@ const App = () => {
           {isSidebarOpen === "chat" && <ChatList onClose={handleCloseSidebar} />}
         </Sidebar>
       </div>
-      <div className="sticky bottom-0 left-0 w-full bg-gray-900 flex flex-col space-y-2 md:flex-row items-center justify-between text-sm text-white px-3 pb-3">
+      <div className="absolute bottom-0 left-0 w-full bg-gray-900 flex flex-col space-y-2 md:flex-row items-center justify-between text-sm text-white px-3 pb-3">
         <div className="flex items-center">
           <Time className="text-xs" />
           <span className="mx-2 font-thin">|</span>

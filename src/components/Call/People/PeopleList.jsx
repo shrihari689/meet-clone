@@ -21,6 +21,26 @@ const PEOPLES = [
     {
         name: "NAVEEN KUMAR A",
         image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
+    },
+    {
+        name: "NAVEEN KUMAR A",
+        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
+    },
+    {
+        name: "NAVEEN KUMAR A",
+        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
+    },
+    {
+        name: "NAVEEN KUMAR A",
+        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
+    },
+    {
+        name: "NAVEEN KUMAR A",
+        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
+    },
+    {
+        name: "NAVEEN KUMAR A",
+        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
     }
 ]
 
@@ -42,7 +62,7 @@ const PeopleList = ({ onClose }) => {
                     <span className="text-xs text-center">Host Control</span>
                 </div>
             </div>
-            <section className="w-full px-3 pl-4 flex-1">
+            <section className="w-full px-3 pl-4 flex-1 overflow-y-auto">
                 <h2 className="font-semibold my-2" style={{ fontSize: "0.7rem" }}>IN CALL</h2>
                 <div className="flex flex-col">
                     {
