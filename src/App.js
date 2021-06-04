@@ -6,6 +6,7 @@ import PeopleList from './components/Call/People/PeopleList';
 import ChatList from './components/Call/Chat/ChatList';
 import Sidebar from './components/Call/Shared/Sidebar';
 import CopyClipboard from './components/Shared/CopyClipboard';
+import CallInfo from './components/Call/Info/CallInfo';
 
 const App = () => {
 
@@ -16,6 +17,10 @@ const App = () => {
       if (prev === option) return "no_sidebar";
       return option;
     })
+  }
+
+  const handleCloseSidebar = () => {
+    handleChangeCallOption("no_sidebar")
   }
 
   return (
@@ -31,8 +36,9 @@ const App = () => {
           <div className="w-full flex justify-start text-white text-sm">You</div>
         </div>
         <Sidebar isOpen={isSidebarOpen !== "no_sidebar"}>
-          {isSidebarOpen === "people" && <PeopleList />}
-          {isSidebarOpen === "chat" && <ChatList />}
+          {isSidebarOpen === "info" && <CallInfo onClose={handleCloseSidebar} />}
+          {isSidebarOpen === "people" && <PeopleList onClose={handleCloseSidebar} />}
+          {isSidebarOpen === "chat" && <ChatList onClose={handleCloseSidebar} />}
         </Sidebar>
       </div>
       <div className="sticky bottom-0 left-0 w-full bg-gray-900 flex flex-col space-y-2 md:flex-row items-center justify-between text-sm text-white px-3 pb-3">
@@ -51,7 +57,7 @@ const App = () => {
           <CallActionButton icon="call_end" className="w-14" active={true} />
         </div>
         <div className="flex items-center">
-          <CallOptionButton icon="info" />
+          <CallOptionButton icon="info" onClick={(_) => handleChangeCallOption("info")} />
           <CallOptionButton icon="group" onClick={(_) => handleChangeCallOption("people")} />
           <CallOptionButton icon="chat" onClick={(_) => handleChangeCallOption("chat")} />
           <CallOptionButton icon="themes" />

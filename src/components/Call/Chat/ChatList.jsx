@@ -2,10 +2,10 @@ import ToggleButton from "../../Shared/Toggle"
 import SidebarHeader from "../Shared/SidebarHeader";
 import ChatItem from "./ChatItem";
 
-const ChatList = () => {
+const ChatList = ({ onClose }) => {
     return (
         <>
-            <SidebarHeader title="In-call messages" onClose={() => { }} />
+            <SidebarHeader title="In-call messages" onClose={onClose} />
             <div className="px-2 py-1 my-2 rounded-md bg-gray-100 text-gray-600 w-11/12 flex items-center justify-between">
                 <span className="text-xs" style={{ fontSize: '11px' }}>Let everyone send messages</span>
                 <ToggleButton on={true} onChange={(_) => { }} />
