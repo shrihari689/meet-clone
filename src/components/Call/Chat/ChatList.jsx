@@ -4,7 +4,7 @@ import ChatItem from "./ChatItem";
 
 const ChatList = () => {
     return (
-        <div className="flex flex-col items-center justify-between rounded-md w-1/2 pt-3 bg-white">
+        <>
             <SidebarHeader title="In-call messages" onClose={() => { }} />
             <div className="px-2 py-1 my-2 rounded-md bg-gray-100 text-gray-600 w-11/12 flex items-center justify-between">
                 <span className="text-xs" style={{ fontSize: '11px' }}>Let everyone send messages</span>
@@ -22,7 +22,7 @@ const ChatList = () => {
                 <input placeholder="Send a message to everyone" className="w-full bg-gray-100 rounded-full py-2 pl-3 pr-10 outline-none placeholder-gray-500 text-sm" type="text" />
                 <i className="google-material-icons cursor-pointer absolute top-5 right-6 text-gray-500" style={{ fontSize: '16px' }}>send</i>
             </div>
-        </div>
+        </>
     );
 }
 

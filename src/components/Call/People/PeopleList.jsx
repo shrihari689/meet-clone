@@ -2,7 +2,7 @@ import SidebarHeader from "../Shared/SidebarHeader";
 
 const PeopleList = () => {
     return (
-        <div className="hidden flex-col items-center justify-between rounded-md w-1/2 pt-3 bg-white">
+        <>
             <SidebarHeader title="People" onClose={() => { }} />
             <div className="grid grid-cols-1 md:grid-cols-3 my-3">
                 <div className="flex flex-col space-y-1 items-center cursor-pointer rounded-md px-2 py-3 text-gray-700 hover:bg-gray-100">
@@ -51,7 +51,7 @@ const PeopleList = () => {
                     </div>
                 </div>
             </section>
-        </div>
+        </>
     );
 }
 
