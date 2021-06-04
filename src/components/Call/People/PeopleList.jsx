@@ -21,26 +21,6 @@ const PEOPLES = [
     {
         name: "NAVEEN KUMAR A",
         image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
-    },
-    {
-        name: "NAVEEN KUMAR A",
-        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
-    },
-    {
-        name: "NAVEEN KUMAR A",
-        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
-    },
-    {
-        name: "NAVEEN KUMAR A",
-        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
-    },
-    {
-        name: "NAVEEN KUMAR A",
-        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
-    },
-    {
-        name: "NAVEEN KUMAR A",
-        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
     }
 ]
 
