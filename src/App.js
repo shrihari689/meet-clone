@@ -7,6 +7,7 @@ import ChatList from './components/Call/Chat/ChatList';
 import Sidebar from './components/Call/Shared/Sidebar';
 import CopyClipboard from './components/Shared/CopyClipboard';
 import CallInfo from './components/Call/Info/CallInfo';
+import CallActivities from './components/Call/Activities/CallActivities';
 
 const App = () => {
 
@@ -39,6 +40,7 @@ const App = () => {
           {isSidebarOpen === "info" && <CallInfo onClose={handleCloseSidebar} />}
           {isSidebarOpen === "people" && <PeopleList onClose={handleCloseSidebar} />}
           {isSidebarOpen === "chat" && <ChatList onClose={handleCloseSidebar} />}
+          {isSidebarOpen === "activities" && <CallActivities onClose={handleCloseSidebar} />}
         </Sidebar>
       </div>
       <div className="absolute bottom-0 left-0 w-full bg-gray-900 flex flex-col space-y-2 md:flex-row items-center justify-between text-sm text-white px-3 pb-3">
@@ -48,20 +50,71 @@ const App = () => {
           <CopyClipboard text="obo-qpck-cbz" className="cursor-pointer" />
         </div>
         <div className="flex items-center">
-          <CallActionButton icon="mic_off" active={true} />
-          <CallActionButton icon="videocam_off" active={true} />
-          <CallActionButton icon="closed_caption" active={false} />
-          <CallActionButton icon="pan_tool" active={false} />
-          <CallActionButton icon="present_to_all" active={false} />
-          <CallActionButton icon="more_vert" active={false} />
-          <CallActionButton icon="call_end" className="w-14" active={true} />
+          <CallActionButton
+            title="Audio on/off"
+            icon="mic_off"
+            active={true}
+          />
+          <CallActionButton
+            title="Video on/off"
+            icon="videocam_off"
+            active={true}
+          />
+          <CallActionButton
+            title="Closed Caption"
+            icon="closed_caption"
+            active={false}
+          />
+          <CallActionButton
+            title="Raise Hands"
+            icon="pan_tool"
+            active={false}
+          />
+          <CallActionButton
+            title="Share Screen"
+            icon="present_to_all"
+            active={false}
+          />
+          <CallActionButton
+            title="More"
+            icon="more_vert"
+            active={false}
+          />
+          <CallActionButton
+            title="Leave Call"
+            icon="call_end"
+            className="w-14"
+            active={true}
+          />
         </div>
         <div className="flex items-center">
-          <CallOptionButton icon="info" onClick={(_) => handleChangeCallOption("info")} />
-          <CallOptionButton icon="group" onClick={(_) => handleChangeCallOption("people")} />
-          <CallOptionButton icon="chat" onClick={(_) => handleChangeCallOption("chat")} />
-          <CallOptionButton icon="themes" />
-          <CallOptionButton icon="security" />
+          <CallOptionButton
+            title="Info"
+            iconSet={(isSidebarOpen === "info") ? "material-icons" : "google-material-icons"}
+            icon="info"
+            onClick={(_) => handleChangeCallOption("info")}
+          />
+          <CallOptionButton
+            title="Participants"
+            icon="group"
+            iconSet={(isSidebarOpen === "people") ? "material-icons" : "google-material-icons"}
+            onClick={(_) => handleChangeCallOption("people")} />
+          <CallOptionButton
+            title="Chat"
+            icon="chat"
+            iconSet={(isSidebarOpen === "chat") ? "material-icons" : "google-material-icons"}
+            onClick={(_) => handleChangeCallOption("chat")} />
+          <CallOptionButton
+            title="Activities"
+            iconSet="google-material-icons"
+            icon="themes"
+            onClick={(_) => handleChangeCallOption("activities")}
+          />
+          <CallOptionButton
+            title="Host Controls"
+            iconSet={(isSidebarOpen === "controls") ? "material-icons" : "google-material-icons"}
+            icon="security"
+          />
         </div>
       </div>
     </main>

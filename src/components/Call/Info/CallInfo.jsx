@@ -13,7 +13,7 @@ const CallInfo = ({ onClose }) => {
         <>
             <SidebarHeader title="Meeting details" onClose={onClose} />
             <section className="w-full p-3 pl-5 text-sm">
-                <h2 className="font-semibold my-2 text-xs text-gray-800">Joining info</h2>
+                <h2 className="font-semibold my-1 text-xs text-gray-800">Joining info</h2>
                 <div>{details.url}</div>
                 <div><span className="text-xs font-semibold">Dial-in:</span> {details.dialIn}</div>
                 <div><span className="text-xs font-semibold">PIN:</span> {details.pin}</div>
