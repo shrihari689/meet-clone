@@ -10,10 +10,8 @@ export const generateNewMeetId = () => {
     const alphabets = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
     const pattern = [["*", "*", "*"], ["*", "*", "*", "*"], ["*", "*", "*"]];
 
-    return pattern.map(e => e.map(_ => alphabets[Math.floor(Math.random() * 26) - 1]).join("")).join("-")
+    return pattern.map(e => e.map(_ => alphabets[Math.floor(Math.random() * 26)]).join("")).join("-")
 }
-
-
 
 
 

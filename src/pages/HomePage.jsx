@@ -6,27 +6,32 @@ import { Link, useHistory } from "react-router-dom"
 import meetLogo from "./../assets/meet_logo.png"
 import { generateNewMeetId, isValidMeetId } from "../utils/validator";
 import { useState } from "react";
+import { Helmet } from "react-helmet"
 
 const HomePage = () => {
 
     const [meetingCode, setMeetingCode] = useState("");
     const pageRouter = useHistory();
 
-    const handleNewMeeting = (newId = generateNewMeetId()) => {
+    const handleNewMeeting = (_, id) => {
+        const newId = id || generateNewMeetId()
         pageRouter.push(newId);
     }
 
     const handleNewMeetingByCode = (e) => {
         e.preventDefault();
-        if (isValidMeetId(meetingCode)) {
-            handleNewMeeting(meetingCode)
+        if (!meetingCode || isValidMeetId(meetingCode)) {
+            handleNewMeeting(null, meetingCode)
         }
     }
 
     return (
-        <div>
+        <>
+            <Helmet>
+                <title>Home - Google Meet Clone | @shrihari689</title>
+            </Helmet>
             <nav className="flex items-center justify-between p-2 flex-wrap">
-                <Link className="flex items-center select-none">
+                <Link to="/home" className="flex items-center select-none">
                     <img src={meetLogo} alt="Meet Clone" />
                     <span className="text-lg ml-1 text-gray-700">Meet</span>
                 </Link>
@@ -63,7 +68,7 @@ const HomePage = () => {
                         <form onSubmit={handleNewMeetingByCode} className="flex items-center mt-2 rounded-sm ml-2 relative">
                             <input
                                 value={meetingCode}
-                                onChange={({ target: { value } }) => setMeetingCode(value)}
+                                onChange={({ target: { value } }) => setMeetingCode(value.trim())}
                                 type="text"
                                 className="border-2 border-gray-300 rounded-sm p-2 outline-none" placeholder="Enter a code" />
                             <button className="ml-2 text-gray-500 text-sm cursor-pointer select-none focus:outline-none">Join</button>
@@ -75,8 +80,7 @@ const HomePage = () => {
                     <HomeCarousel />
                 </div>
             </main>
-        </div>
-
+        </>
     );
 }
 

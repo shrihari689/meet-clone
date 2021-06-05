@@ -10,6 +10,7 @@ import CallInfo from './../components/Call/Info/CallInfo';
 import CallActivities from './../components/Call/Activities/CallActivities';
 import { isValidMeetId } from "./../utils/validator"
 import { useHistory } from 'react-router-dom';
+import { Helmet } from "react-helmet"
 
 const CallPage = ({ match: { params } }) => {
 
@@ -20,10 +21,6 @@ const CallPage = ({ match: { params } }) => {
     if (!isValidMeetId(meetId)) {
         pageRouter.replace("/");
     }
-
-    useEffect(() => {
-        document.title = `${meetId} - Google Meet Clone | @shrihari689`
-    }, [meetId]);
 
     const handleChangeCallOption = (option) => {
         setIsSidebarOpen(prev => {
@@ -38,6 +35,9 @@ const CallPage = ({ match: { params } }) => {
 
     return (
         <main className="h-screen w-full flex flex-col justify-between bg-gray-900 overflow-hidden">
+            <Helmet>
+                <title>{meetId} - Google Meet Clone | @shrihari689</title>
+            </Helmet>
             <div className="w-full h-screen flex p-3 pb-14">
                 <div className="flex-col items-center justify-between flex-1 px-2 flex">
                     <div className="w-full flex justify-end">
@@ -93,6 +93,7 @@ const CallPage = ({ match: { params } }) => {
                         active={false}
                     />
                     <CallActionButton
+                        onClick={(_) => { pageRouter.push("home") }}
                         title="Leave Call"
                         icon="call_end"
                         className="w-14"

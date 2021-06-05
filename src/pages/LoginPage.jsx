@@ -1,12 +1,13 @@
 import googleMeetIcon from "../assets/google_meet_icon.png"
 import googleIcon from "../assets/google_icon.png"
 import firebase, { auth } from "./../utils/firebase"
+import { Helmet } from "react-helmet"
+
 const LoginPage = () => {
 
     const handleLogin = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithRedirect(provider).then(result => {
-            console.log(result);
+        auth.signInWithRedirect(provider).then(_ => {
         }).catch(e => {
             console.log(e);
         })
@@ -14,6 +15,9 @@ const LoginPage = () => {
 
     return (
         <div className="h-screen bg-gray-900 w-full flex flex-col items-center justify-center">
+            <Helmet>
+                <title>Login - Google Meet Clone | @shrihari689</title>
+            </Helmet>
             <div className="w-32 h-32 object-cover">
                 <img src={googleMeetIcon} alt="Google Meet" />
             </div>
