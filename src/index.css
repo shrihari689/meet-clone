@@ -19,3 +19,7 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-800;
 }
+
+body {
+  font-family: "Roboto";
+}
