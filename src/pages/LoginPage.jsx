@@ -1,16 +1,20 @@
 import googleMeetIcon from "../assets/google_meet_icon.png"
 import googleIcon from "../assets/google_icon.png"
-
+import firebase, { auth } from "./../utils/firebase"
 const LoginPage = () => {
 
-
     const handleLogin = () => {
-
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithRedirect(provider).then(result => {
+            console.log(result);
+        }).catch(e => {
+            console.log(e);
+        })
     }
 
     return (
         <div className="h-screen bg-gray-900 w-full flex flex-col items-center justify-center">
-            <div className="w-32 h-32 object-cover animate-bounce">
+            <div className="w-32 h-32 object-cover">
                 <img src={googleMeetIcon} alt="Google Meet" />
             </div>
             <div className="text-xl my-2 text-gray-200">Google Meet Clone</div>
