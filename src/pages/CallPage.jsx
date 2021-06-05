@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CallOptionButton from './../components/Call/CallOptionButton';
 import CallActionButton from './../components/Call/CallActionButton';
 import Time from './../components/Shared/Time';

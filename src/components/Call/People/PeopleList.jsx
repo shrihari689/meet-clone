@@ -29,7 +29,7 @@ const PeopleList = ({ onClose }) => {
         <>
             <SidebarHeader title="People" onClose={onClose} />
             <div className="flex flex-col flex-1 overflow-y-auto items-center w-full">
-                <div className="grid grid-cols-1 md:grid-cols-3 w-full px-2">
+                <div className="grid grid-cols-3 w-full px-2">
                     <div className="flex flex-col space-y-1 items-center cursor-pointer rounded-md px-2 py-3 select-none text-gray-700 hover:bg-gray-100">
                         <i className="google-material-icons" style={{ fontSize: '18px' }}>mic_off</i>
                         <span className="text-xs text-center">All muted</span>
