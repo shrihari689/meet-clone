@@ -23,7 +23,7 @@ const CallPage = ({ match: { params } }) => {
 
     useEffect(() => {
         document.title = `${meetId} - Google Meet Clone | @shrihari689`
-    }, []);
+    }, [meetId]);
 
     const handleChangeCallOption = (option) => {
         setIsSidebarOpen(prev => {
