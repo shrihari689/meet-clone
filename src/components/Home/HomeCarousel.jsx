@@ -29,11 +29,21 @@ const HomeCarousel = () => {
     }, [])
 
     return (
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center justify-center">
             <div className="flex flex-col items-center">
                 <img className="w-1/3 rounded-full object-cover" src={CONTENTS[currentSlide].image} alt="" />
                 <span className="text-base mt-2 text-center">{CONTENTS[currentSlide].title}</span>
-                <span className="text-gray-600 text-xs mt-2 px-60 text-center">{CONTENTS[currentSlide].desc}</span>
+                <span className="text-gray-600 text-xs mt-2 px-10 md:px-52 text-center">{CONTENTS[currentSlide].desc}</span>
+            </div>
+            <div className="flex items-center mt-3">
+                {
+                    CONTENTS.map((_, id) => (
+                        <div
+                            key={id}
+                            className={"w-2 h-2 mx-1 rounded-full " + (id === currentSlide ? "bg-indigo-700" : "bg-gray-400")}
+                        />
+                    ))
+                }
             </div>
         </div>
     );

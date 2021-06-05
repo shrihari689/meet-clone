@@ -1,4 +1,5 @@
 import HomeCarousel from "../components/Home/HomeCarousel"
+import NavBarAccount from "../components/Home/NavBarAccount";
 
 const HomePage = () => {
     return (
@@ -8,7 +9,7 @@ const HomePage = () => {
                     <img src="https://www.gstatic.com/meet/google_meet_horizontal_wordmark_2020q4_1x_icon_124_40_2373e79660dabbf194273d27aa7ee1f5.png" alt="Meet Clone" />
                     <span className="text-lg ml-1 text-gray-700">Meet</span>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center relative">
                     <div className="sm:flex items-center hidden">
                         <span>1:18 PM</span>
                         <span className="mx-1">•</span>
@@ -26,7 +27,7 @@ const HomePage = () => {
                     <a target="_blank" href="https://apps.google.com/" className="h-10 w-10 ml-5 flex items-center justify-center hover:bg-gray-100 cursor-pointer rounded-full">
                         <i className="google-material-icons text-gray-600">apps</i>
                     </a>
-                    <img className="h-8 w-8 rounded-full ml-2" src="https://lh3.google.com/u/1/ogw/ADGmqu9eAv3S4CI3NA-MHUQJ_vUrZr7geEk-MnlgcZpa=s32-c-mo" alt="Shri Hari L" />
+                    <NavBarAccount />
                 </div>
             </nav>
             <main className="mt-10 md:h-96 md:mt-24 flex items-center flex-wrap">
