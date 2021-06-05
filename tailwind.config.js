@@ -10,11 +10,13 @@ module.exports = {
       transitionProperty: {
         'height': 'height',
         'width': 'width',
-      }
+      },
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      scale: ['active'],
+    }
   },
   plugins: [],
 }
