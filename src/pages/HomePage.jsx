@@ -1,5 +1,7 @@
 import HomeCarousel from "../components/Home/HomeCarousel"
 import NavBarAccount from "../components/Home/NavBarAccount";
+import Date from "../components/Shared/Date";
+import Time from "../components/Shared/Time"
 
 const HomePage = () => {
     return (
@@ -11,9 +13,9 @@ const HomePage = () => {
                 </div>
                 <div className="flex items-center relative">
                     <div className="sm:flex items-center hidden">
-                        <span>1:18 PM</span>
+                        <Time />
                         <span className="mx-1">•</span>
-                        <span>Sat, June 5</span>
+                        <Date />
                         <div className="h-10 w-10 ml-2 flex items-center justify-center hover:bg-gray-100 cursor-pointer rounded-full">
                             <i className="google-material-icons text-gray-600">help_outline</i>
                         </div>
@@ -45,7 +47,7 @@ const HomePage = () => {
                         </div>
                     </div>
                 </div>
-                <div className="w-full md:w-1/2 pt-8 px-2">
+                <div className="w-full md:w-1/2 pt-16 md:pt-8 px-2">
                     <HomeCarousel />
                 </div>
             </main>

@@ -40,7 +40,7 @@ const HomeCarousel = () => {
                     CONTENTS.map((_, id) => (
                         <div
                             key={id}
-                            className={"w-2 h-2 mx-1 rounded-full " + (id === currentSlide ? "bg-indigo-700" : "bg-gray-400")}
+                            className={"w-2 h-2 mx-1 rounded-full " + (id === currentSlide ? "bg-indigo-700" : "bg-gray-300")}
                         />
                     ))
                 }
