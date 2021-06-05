@@ -26,7 +26,7 @@ const HomePage = () => {
                             <i className="google-material-icons text-gray-600">settings</i>
                         </div>
                     </div>
-                    <a target="_blank" href="https://apps.google.com/" className="h-10 w-10 ml-5 flex items-center justify-center hover:bg-gray-100 cursor-pointer rounded-full">
+                    <a target="_blank" rel="noreferrer" href="https://apps.google.com/" className="h-10 w-10 ml-5 flex items-center justify-center hover:bg-gray-100 cursor-pointer rounded-full">
                         <i className="google-material-icons text-gray-600">apps</i>
                     </a>
                     <NavBarAccount />

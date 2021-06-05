@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { getDateTimeString } from '../../utils/time';
 
 const Date = (props) => {
 
-    const [currentDate, _] = useState(getDateTimeString().date)
+    const currentDate = getDateTimeString().date
 
     return (
         <div {...props}>{currentDate}</div>
