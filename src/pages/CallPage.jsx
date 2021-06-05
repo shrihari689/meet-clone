@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CallOptionButton from './../components/Call/CallOptionButton';
 import CallActionButton from './../components/Call/CallActionButton';
 import Time from './../components/Shared/Time';
@@ -20,6 +20,10 @@ const CallPage = ({ match: { params } }) => {
     if (!isValidMeetId(meetId)) {
         pageRouter.replace("/");
     }
+
+    useEffect(() => {
+        document.title = `${meetId} - Google Meet Clone | @shrihari689`
+    }, []);
 
     const handleChangeCallOption = (option) => {
         setIsSidebarOpen(prev => {
@@ -55,7 +59,7 @@ const CallPage = ({ match: { params } }) => {
                 <div className="flex items-center">
                     <Time className="text-xs" />
                     <span className="mx-2 font-thin">|</span>
-                    <CopyClipboard text="obo-qpck-cbz" className="cursor-pointer" />
+                    <CopyClipboard text={meetId} className="cursor-pointer" />
                 </div>
                 <div className="flex items-center">
                     <CallActionButton

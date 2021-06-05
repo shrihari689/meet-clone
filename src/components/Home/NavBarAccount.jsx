@@ -18,7 +18,9 @@ const NavBarAccount = () => {
             <img
                 tabIndex={0}
                 onFocus={(_) => setIsOpen(true)}
-                className="h-8 w-8 rounded-full ml-2 cursor-pointer hover:shadow-lg" src="https://lh3.google.com/u/1/ogw/ADGmqu9eAv3S4CI3NA-MHUQJ_vUrZr7geEk-MnlgcZpa=s32-c-mo" alt="Shri Hari L" />
+                className="h-8 w-8 rounded-full ml-2 cursor-pointer hover:shadow-lg"
+                src="https://lh3.googleusercontent.com/a-/AOh14GhinDC_5_G9VLzmIbRW5L0d8f6w6Kg92VxIKWSu=s48"
+                alt="Shri Hari L" />
             {
                 isOpen && (
                     <div
