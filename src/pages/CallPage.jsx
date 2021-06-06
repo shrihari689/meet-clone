@@ -12,12 +12,20 @@ import { isValidMeetId } from "./../utils/validator"
 import { useHistory } from 'react-router-dom';
 import { Helmet } from "react-helmet"
 import { connect } from 'react-redux';
+import { resetCall } from '../database/call';
+import { useEffect } from 'react';
 
-const CallPage = ({ match, participants, currentUser }) => {
+const CallPage = ({ match, participants, currentUser, endCall }) => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState("no_sidebar");
     const pageRouter = useHistory();
     const { params: { id: meetId } } = match;
+
+    useEffect(() => {
+        return () => {
+            endCall()
+        }
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     if (!isValidMeetId(meetId)) {
         pageRouter.replace("/");
@@ -147,4 +155,8 @@ const mapStateToProps = state => ({
     participants: state.call.participants,
 })
 
-export default connect(mapStateToProps)(CallPage);
+const mapDispatchToProps = dispatch => ({
+    endCall: () => dispatch(resetCall())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CallPage);

@@ -11,3 +11,11 @@ export const Message = {
     sender: User,
     time: ""
 }
+
+export const Call = {
+    host: User,
+    isHost: false,
+    chats: [],
+    lastSeenMessage: [],
+    participants: []
+}

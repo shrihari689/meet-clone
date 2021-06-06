@@ -1,15 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { User } from "./entities"
+import { Call } from "./entities"
 
 const callSlice = createSlice({
     name: "Call",
-    initialState: {
-        host: User,
-        isHost: false,
-        chats: [],
-        lastSeenMessage: [],
-        participants: []
-    },
+    initialState: Call,
     reducers: {
         setCallInfo: (state, { payload }) => {
             state.host = payload.host
@@ -18,11 +12,12 @@ const callSlice = createSlice({
         },
         addMessage: (state, { payload }) => {
             state.chats.push(payload)
-        }
+        },
+        resetCall: _ => Call
     }
 })
 
-export const { setCallInfo, addMessage } = callSlice.actions
+export const { setCallInfo, addMessage, resetCall } = callSlice.actions
 
 
 export default callSlice;
