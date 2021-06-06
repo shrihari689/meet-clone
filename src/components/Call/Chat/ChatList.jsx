@@ -3,24 +3,17 @@ import { connect } from "react-redux";
 import ToggleButton from "../../Shared/Toggle"
 import SidebarHeader from "../Shared/SidebarHeader";
 import ChatItem from "./ChatItem";
-import { addMessage } from "./../../../database/call"
 import { getDateTimeString } from "../../../utils/time";
 import socket from "./../../../utils/socket"
 
-const ChatList = ({ onClose, addMessage, messages, currentUser }) => {
+const ChatList = ({ onClose, messages, currentUser }) => {
 
     const [message, setMessage] = useState("");
     const chatItems = useRef();
 
     useEffect(() => {
-        socket.off("newMessage");
         chatItems.current?.scroll(10000, 10000)
-        socket.on("newMessage", (data) => {
-            const payload = JSON.parse(data)
-            addMessage(payload)
-            chatItems.current?.scroll(10000, 10000)
-        })
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [messages]) // eslint-disable-line react-hooks/exhaustive-deps
 
 
     const handleSendMessage = (e) => {
@@ -75,8 +68,4 @@ const mapStateToProps = state => ({
     currentUser: state.auth
 })
 
-const mapDispatchToProps = dispatch => ({
-    addMessage: (e) => dispatch(addMessage(e))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
+export default connect(mapStateToProps)(ChatList);

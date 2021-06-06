@@ -12,24 +12,30 @@ import { isValidMeetId } from "./../utils/validator"
 import { useHistory } from 'react-router-dom';
 import { Helmet } from "react-helmet"
 import { connect } from 'react-redux';
-import { resetCall } from '../database/call';
+import { addMessage, resetCall } from '../database/call';
 import { useEffect } from 'react';
 import socket from "./../utils/socket"
 
-const CallPage = ({ match, participants, currentUser, endCall }) => {
+const CallPage = ({ match, participants, addMessage, endCall }) => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState("no_sidebar");
     const pageRouter = useHistory();
     const { params: { id: meetId } } = match;
 
     useEffect(() => {
-        if (isValidMeetId(meetId))
+        if (isValidMeetId(meetId)) {
             socket.emit("joinCall", JSON.stringify({
                 meetId
             }))
-
+            socket.off("newMessage");
+            socket.on("newMessage", (data) => {
+                const payload = JSON.parse(data)
+                addMessage(payload)
+            })
+        }
         return () => {
             endCall()
+            socket.off("newMessage");
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -162,7 +168,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    endCall: () => dispatch(resetCall())
+    endCall: () => dispatch(resetCall()),
+    addMessage: (e) => dispatch(addMessage(e))
 })
+
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(CallPage);
