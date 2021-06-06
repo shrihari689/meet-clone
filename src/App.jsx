@@ -18,6 +18,7 @@ function App({ isLoggedIn, setCurrentUser }) {
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
             setCurrentUser({
+                id: user?.uid,
                 name: user?.displayName,
                 email: user?.email,
                 image: user?.photoURL,

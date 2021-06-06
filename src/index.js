@@ -6,10 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import store from "./database/store";
 import { Provider } from "react-redux"
 
-console.log(store.getState());
-
 store.subscribe(() => {
-  console.log(store.getState());
+  console.log("Logging: ", store.getState());
 })
 
 ReactDOM.render(
