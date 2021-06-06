@@ -45,7 +45,7 @@ const PeopleList = ({ onClose, currentUser, participants }) => {
                     </div>
                 </div>
                 <section className="w-full px-3 pl-4 flex-1">
-                    <h2 className="font-semibold my-2" style={{ fontSize: "0.7rem" }}>IN CALL</h2>
+                    <h2 className="font-semibold my-2 text-gray-600" style={{ fontSize: "0.7rem" }}>IN CALL</h2>
                     <div className="flex flex-col">
                         < PeopleItem
                             key={-1}
