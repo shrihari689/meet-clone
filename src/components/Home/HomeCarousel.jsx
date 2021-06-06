@@ -33,7 +33,7 @@ const HomeCarousel = () => {
             <div className="flex flex-col items-center">
                 <img className="w-1/3 rounded-full object-cover" src={CONTENTS[currentSlide].image} alt="" />
                 <span className="text-base mt-2 text-center">{CONTENTS[currentSlide].title}</span>
-                <span className="text-gray-600 text-xs mt-2 px-10 md:px-52 text-center">{CONTENTS[currentSlide].desc}</span>
+                <span className="text-gray-600 text-xs mt-2 px-10 md:px-32 text-center">{CONTENTS[currentSlide].desc}</span>
             </div>
             <div className="flex items-center mt-3">
                 {
