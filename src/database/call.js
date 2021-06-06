@@ -22,7 +22,7 @@ const callSlice = createSlice({
     }
 })
 
-export const { setUser } = callSlice.actions
+export const { setCallInfo, addMessage } = callSlice.actions
 
 
 export default callSlice;

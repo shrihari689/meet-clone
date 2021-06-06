@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { connect } from "react-redux";
 import { auth } from "./../../utils/firebase";
 
-const NavBarAccount = () => {
+const NavBarAccount = ({ image, name }) => {
     const [isOpen, setIsOpen] = useState(false);
     const optionsRef = useRef()
 
@@ -19,8 +20,8 @@ const NavBarAccount = () => {
                 tabIndex={0}
                 onFocus={(_) => setIsOpen(true)}
                 className="h-8 w-8 rounded-full ml-2 cursor-pointer hover:shadow-lg"
-                src="https://lh3.googleusercontent.com/a-/AOh14GhinDC_5_G9VLzmIbRW5L0d8f6w6Kg92VxIKWSu=s48"
-                alt="Shri Hari L" />
+                src={image}
+                alt={name} />
             {
                 isOpen && (
                     <div
@@ -36,4 +37,9 @@ const NavBarAccount = () => {
     );
 }
 
-export default NavBarAccount;
+const mapStateToProps = state => ({
+    image: state.auth.image,
+    name: state.auth.name
+})
+
+export default connect(mapStateToProps)(NavBarAccount);

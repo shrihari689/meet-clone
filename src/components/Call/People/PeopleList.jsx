@@ -1,30 +1,31 @@
+import { connect } from "react-redux";
 import SidebarHeader from "../Shared/SidebarHeader";
 import PeopleItem from "./PeopleItem";
 
-const PEOPLES = [
-    {
-        name: "SHRI HARI L (You)",
-        image: "https://lh3.googleusercontent.com/a-/AOh14GhinDC_5_G9VLzmIbRW5L0d8f6w6Kg92VxIKWSu=s32-p-k-no-mo"
-    },
-    {
-        name: "AJAY KOUSHIK K N",
-        image: "https://ssl.gstatic.com/s2/profiles/images/silhouette48.png"
-    },
-    {
-        name: "NITHARSHAN D J",
-        image: "https://lh3.googleusercontent.com/a-/AOh14GgZZcv8W-Rj-Jf2bUbhCZoUi6YwA-JLIRC5gbGilw=s48"
-    },
-    {
-        name: "MOHAMED NOWFAL A",
-        image: "https://lh3.googleusercontent.com/a-/AOh14GiHGcX9JS2WAZNKoMfDEN2o7bP8mu-XIOijnxbBVw=s48"
-    },
-    {
-        name: "NAVEEN KUMAR A",
-        image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
-    }
-]
+// const PEOPLES = [
+//     {
+//         name: "SHRI HARI L (You)",
+//         image: "https://lh3.googleusercontent.com/a-/AOh14GhinDC_5_G9VLzmIbRW5L0d8f6w6Kg92VxIKWSu=s32-p-k-no-mo"
+//     },
+//     {
+//         name: "AJAY KOUSHIK K N",
+//         image: "https://ssl.gstatic.com/s2/profiles/images/silhouette48.png"
+//     },
+//     {
+//         name: "NITHARSHAN D J",
+//         image: "https://lh3.googleusercontent.com/a-/AOh14GgZZcv8W-Rj-Jf2bUbhCZoUi6YwA-JLIRC5gbGilw=s48"
+//     },
+//     {
+//         name: "MOHAMED NOWFAL A",
+//         image: "https://lh3.googleusercontent.com/a-/AOh14GiHGcX9JS2WAZNKoMfDEN2o7bP8mu-XIOijnxbBVw=s48"
+//     },
+//     {
+//         name: "NAVEEN KUMAR A",
+//         image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
+//     }
+// ]
 
-const PeopleList = ({ onClose }) => {
+const PeopleList = ({ onClose, currentUser, participants }) => {
     return (
         <>
             <SidebarHeader title="People" onClose={onClose} />
@@ -46,8 +47,14 @@ const PeopleList = ({ onClose }) => {
                 <section className="w-full px-3 pl-4 flex-1">
                     <h2 className="font-semibold my-2" style={{ fontSize: "0.7rem" }}>IN CALL</h2>
                     <div className="flex flex-col">
+                        < PeopleItem
+                            key={-1}
+                            details={currentUser}
+                            onMute={(_) => { }}
+                            onPin={(_) => { }}
+                        />
                         {
-                            PEOPLES
+                            participants
                                 .sort((a, b) => a.name < b.name ? -1 : 1)
                                 .map((people, i) =>
                                     < PeopleItem
@@ -65,4 +72,9 @@ const PeopleList = ({ onClose }) => {
     );
 }
 
-export default PeopleList;
+const mapStateToProps = state => ({
+    currentUser: state.auth,
+    participants: state.call.participants
+})
+
+export default connect(mapStateToProps)(PeopleList);
