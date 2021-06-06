@@ -4,3 +4,10 @@ export const User = {
     email: "",
     image: ""
 }
+
+export const Message = {
+    id: "",
+    text: "",
+    sender: User,
+    time: ""
+}

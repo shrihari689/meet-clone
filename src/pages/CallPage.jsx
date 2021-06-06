@@ -11,12 +11,13 @@ import CallActivities from './../components/Call/Activities/CallActivities';
 import { isValidMeetId } from "./../utils/validator"
 import { useHistory } from 'react-router-dom';
 import { Helmet } from "react-helmet"
+import { connect } from 'react-redux';
 
-const CallPage = ({ match: { params } }) => {
+const CallPage = ({ match, participants, currentUser }) => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState("no_sidebar");
     const pageRouter = useHistory();
-    const { id: meetId } = params;
+    const { params: { id: meetId } } = match;
 
     if (!isValidMeetId(meetId)) {
         pageRouter.replace("/");
@@ -107,11 +108,18 @@ const CallPage = ({ match: { params } }) => {
                         icon="info"
                         onClick={(_) => handleChangeCallOption("info")}
                     />
-                    <CallOptionButton
-                        title="Participants"
-                        icon="group"
-                        iconSet={(isSidebarOpen === "people") ? "material-icons" : "google-material-icons"}
-                        onClick={(_) => handleChangeCallOption("people")} />
+                    <div className="flex items-center justify-center relative">
+                        <CallOptionButton
+                            title="Participants"
+                            icon="group"
+                            iconSet={(isSidebarOpen === "people") ? "material-icons" : "google-material-icons"}
+                            onClick={(_) => handleChangeCallOption("people")} />
+                        <div
+                            style={{ fontSize: "0.6rem" }}
+                            className="absolute -top-1 right-0 p-1 h-4 bg-red-700 text-xs text-white flex items-center justify-center rounded-full">
+                            {participants.length + 1}
+                        </div>
+                    </div>
                     <CallOptionButton
                         title="Chat"
                         icon="chat"
@@ -134,4 +142,9 @@ const CallPage = ({ match: { params } }) => {
     );
 }
 
-export default CallPage;
+const mapStateToProps = state => ({
+    currentUser: state.auth,
+    participants: state.call.participants,
+})
+
+export default connect(mapStateToProps)(CallPage);

@@ -34,7 +34,6 @@ export const getDateTimeString = (date = new Date()) => {
     }
     timeString +=
         (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
-    timeString += ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds()) + " ";
-    timeString += date.getHours() > 11 ? "PM" : "AM";
+    timeString += date.getHours() > 11 ? " PM" : " AM";
     return { date: dateString, time: timeString };
 };

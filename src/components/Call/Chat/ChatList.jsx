@@ -1,19 +1,21 @@
 import { useEffect, useRef, useState } from "react";
+import { connect } from "react-redux";
 import ToggleButton from "../../Shared/Toggle"
 import SidebarHeader from "../Shared/SidebarHeader";
 import ChatItem from "./ChatItem";
+import { addMessage } from "./../../../database/call"
+import { getDateTimeString } from "../../../utils/time";
 
-const MESSAGES = [
-    { message: "Good morning mam 🚀", senderName: "You", time: "12:14 PM" },
-    { message: "Gm mam!", senderName: "NITHARSHAN D J", time: "12:14 PM" },
-    { message: "191EC108", senderName: "AJAY KOUSHIK K N", time: "12:16 PM" },
-    { message: "Mam one doubt!", senderName: "MOHAMED NOWFAL A", time: "12:18 PM" },
-    { message: "Your voice is breaking mam", senderName: "NAVEEN KUMAR A", time: "12:19 PM" }
-]
+// const MESSAGES = [
+//     { message: "Good morning mam 🚀", senderName: "You", time: "12:14 PM" },
+//     { message: "Gm mam!", senderName: "NITHARSHAN D J", time: "12:14 PM" },
+//     { message: "191EC108", senderName: "AJAY KOUSHIK K N", time: "12:16 PM" },
+//     { message: "Mam one doubt!", senderName: "MOHAMED NOWFAL A", time: "12:18 PM" },
+//     { message: "Your voice is breaking mam", senderName: "NAVEEN KUMAR A", time: "12:19 PM" }
+// ]
 
-const ChatList = ({ onClose }) => {
+const ChatList = ({ onClose, addMessage, messages, currentUser }) => {
 
-    const [messages, setMessages] = useState(MESSAGES);
     const [message, setMessage] = useState("");
     const chatItems = useRef();
 
@@ -25,10 +27,14 @@ const ChatList = ({ onClose }) => {
         e.preventDefault();
         const messageToBeSent = message.trim();
         if (messageToBeSent)
-            setMessages(prev => ([
-                ...prev,
-                { message: messageToBeSent, senderName: "You", time: "12:25 PM" }
-            ]))
+            addMessage(
+                {
+                    id: Math.ceil(Math.random() * 10000),
+                    text: messageToBeSent,
+                    sender: currentUser,
+                    time: getDateTimeString().time
+                }
+            )
         setMessage("");
     }
 
@@ -66,4 +72,13 @@ const ChatList = ({ onClose }) => {
     );
 }
 
-export default ChatList;
+const mapStateToProps = state => ({
+    messages: state.call.chats,
+    currentUser: state.auth
+})
+
+const mapDispatchToProps = dispatch => ({
+    addMessage: (e) => dispatch(addMessage(e))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
