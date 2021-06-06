@@ -5,14 +5,7 @@ import SidebarHeader from "../Shared/SidebarHeader";
 import ChatItem from "./ChatItem";
 import { addMessage } from "./../../../database/call"
 import { getDateTimeString } from "../../../utils/time";
-
-// const MESSAGES = [
-//     { message: "Good morning mam 🚀", senderName: "You", time: "12:14 PM" },
-//     { message: "Gm mam!", senderName: "NITHARSHAN D J", time: "12:14 PM" },
-//     { message: "191EC108", senderName: "AJAY KOUSHIK K N", time: "12:16 PM" },
-//     { message: "Mam one doubt!", senderName: "MOHAMED NOWFAL A", time: "12:18 PM" },
-//     { message: "Your voice is breaking mam", senderName: "NAVEEN KUMAR A", time: "12:19 PM" }
-// ]
+import socket from "./../../../utils/socket"
 
 const ChatList = ({ onClose, addMessage, messages, currentUser }) => {
 
@@ -20,34 +13,39 @@ const ChatList = ({ onClose, addMessage, messages, currentUser }) => {
     const chatItems = useRef();
 
     useEffect(() => {
+        socket.off("newMessage");
         chatItems.current?.scroll(10000, 10000)
-    }, [messages, chatItems])
+        socket.on("newMessage", (data) => {
+            const payload = JSON.parse(data)
+            addMessage(payload)
+            chatItems.current?.scroll(10000, 10000)
+        })
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
 
     const handleSendMessage = (e) => {
         e.preventDefault();
         const messageToBeSent = message.trim();
         if (messageToBeSent)
-            addMessage(
-                {
-                    id: Math.ceil(Math.random() * 10000),
-                    text: messageToBeSent,
-                    sender: currentUser,
-                    time: getDateTimeString().time
-                }
-            )
+            socket.emit("newMessage", JSON.stringify({
+                id: Math.ceil(Math.random() * 10000),
+                text: messageToBeSent,
+                sender: currentUser,
+                time: getDateTimeString().time
+            }))
         setMessage("");
     }
 
     return (
         <>
             <SidebarHeader title="In-call messages" onClose={onClose} />
-            <div ref={chatItems} className="overflow-y-auto flex flex-col items-center flex-1">
-                <div className="px-2 py-1 my-2 rounded-md bg-gray-100 text-gray-600 w-11/12 flex items-center justify-between">
+            <div ref={chatItems} className="overflow-y-auto flex flex-col items-center flex-1 px-4">
+                <div className="px-2 py-1 my-2 rounded-md bg-gray-100 text-gray-600 w-full flex items-center justify-between">
                     <span className="text-xs" style={{ fontSize: '11px' }}>Let everyone send messages</span>
                     <ToggleButton on={true} onChange={(_) => { }} />
                 </div>
-                <div className="p-2 my-1 rounded-md text-center flex justify-center items-center bg-gray-100 text-gray-600 w-11/12 text-xs">Messages can only be seen by people in the call and are deleted when the call ends.</div>
-                <div className="flex-1 flex flex-col w-full px-4 mt-1">
+                <div className="p-2 my-1 rounded-md text-center flex justify-center items-center bg-gray-100 text-gray-600 w-full text-xs">Messages can only be seen by people in the call and are deleted when the call ends.</div>
+                <div className="flex-1 flex flex-col w-full mt-1">
                     {
                         messages.map((message, id) =>
                             <ChatItem {...message} key={id} />

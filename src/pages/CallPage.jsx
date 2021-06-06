@@ -14,6 +14,7 @@ import { Helmet } from "react-helmet"
 import { connect } from 'react-redux';
 import { resetCall } from '../database/call';
 import { useEffect } from 'react';
+import socket from "./../utils/socket"
 
 const CallPage = ({ match, participants, currentUser, endCall }) => {
 
@@ -22,6 +23,11 @@ const CallPage = ({ match, participants, currentUser, endCall }) => {
     const { params: { id: meetId } } = match;
 
     useEffect(() => {
+
+        socket.emit("joinCall", JSON.stringify({
+            meetId
+        }))
+
         return () => {
             endCall()
         }
