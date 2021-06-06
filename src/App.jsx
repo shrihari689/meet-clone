@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -10,21 +10,27 @@ import CallPage from "./pages/CallPage"
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import { auth } from "./utils/firebase"
+import { setUser } from "./database/auth";
+import { connect } from "react-redux"
 
-export default function App() {
-    const [currentUser, setCurrentUser] = useState(false);
+function App({ isLoggedIn, setCurrentUser }) {
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
-            setCurrentUser(user)
+            setCurrentUser({
+                name: user?.displayName,
+                email: user?.email,
+                image: user?.photoURL,
+                isLoggedIn: (user != null)
+            })
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    if (currentUser === false) {
+    if (isLoggedIn === null) {
         return <Loader />
     }
 
-    if (currentUser === null) {
+    if (isLoggedIn === false) {
         return (
             <Router>
                 <Switch>
@@ -45,3 +51,16 @@ export default function App() {
         </Router>
     );
 }
+
+
+const mapDispatchToProps = dispatch => ({
+    setCurrentUser: (e) => dispatch(setUser(e))
+})
+
+const mapStateToProps = state => ({
+    currentUser: state.auth,
+    isLoggedIn: state.auth.isLoggedIn
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
