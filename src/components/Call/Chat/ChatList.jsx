@@ -18,7 +18,6 @@ const ChatList = ({ onClose }) => {
     const chatItems = useRef();
 
     useEffect(() => {
-        console.log(chatItems.current)
         chatItems.current?.scroll(10000, 10000)
     }, [messages, chatItems])
 

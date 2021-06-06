@@ -19,7 +19,8 @@ const CallInfo = ({ onClose }) => {
                 <div><span className="text-xs font-semibold">PIN:</span> {details.pin}</div>
             </section>
             <CopyClipboard
-                text="📄 Copy joining info"
+                text="https://meet.google.com/obo-qpck-cbz"
+                displayText="📄 Copy joining info"
                 position="-bottom-8 left-16"
                 className="cursor-pointer bg-gray-100 text-indigo-800 rounded-md hover:bg-gray-200 px-5 py-2"
             />

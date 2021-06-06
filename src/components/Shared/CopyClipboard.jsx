@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 
-const CopyClipboard = ({ text, className, position = "-top-8" }) => {
+const CopyClipboard = ({ text, className, displayText, position = "-top-8" }) => {
 
     const [isCopied, setIsCopied] = useState(false);
-
 
     useEffect(() => {
         let timeoutId;
@@ -46,7 +45,7 @@ const CopyClipboard = ({ text, className, position = "-top-8" }) => {
             <span
                 className={className}
                 onClick={copyText}>
-                {text}
+                {displayText}
             </span >
         </div>
     );

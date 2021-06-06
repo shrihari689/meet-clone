@@ -59,7 +59,7 @@ const CallPage = ({ match: { params } }) => {
                 <div className="flex items-center">
                     <Time className="text-xs" />
                     <span className="mx-2 font-thin">|</span>
-                    <CopyClipboard text={meetId} className="cursor-pointer" />
+                    <CopyClipboard text={meetId} displayText={meetId} className="cursor-pointer" />
                 </div>
                 <div className="flex items-center">
                     <CallActionButton

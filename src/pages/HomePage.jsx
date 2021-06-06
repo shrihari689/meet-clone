@@ -58,7 +58,7 @@ const HomePage = () => {
             </nav>
             <main className="mt-10 md:h-96 md:mt-24 flex items-center flex-wrap">
                 <div className="w-full md:w-1/2 flex flex-col items-center md:items-start px-5 md:px-10">
-                    <h1 className="text-xl md:text-3xl md:pr-10 font-medium select-none">Secure Video Call Conferencing for everyone</h1>
+                    <h1 className="text-xl md:text-3xl md:pr-20 font-medium select-none">Secure Video Call Conferencing for everyone</h1>
                     <span className="text-xs md:text-sm text-gray-600 mt-2 md:pr-20 select-none">Connect, collaborate, and celebrate from anywhere with Google Meet</span>
                     <div className="flex items-center flex-wrap mt-5">
                         <div onClick={handleNewMeeting} className="flex items-center text-white cursor-pointer select-none mt-2 ml-2 bg-indigo-600 hover:bg-indigo-800 p-2 rounded-sm">
