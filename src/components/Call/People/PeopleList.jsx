@@ -2,29 +2,6 @@ import { connect } from "react-redux";
 import SidebarHeader from "../Shared/SidebarHeader";
 import PeopleItem from "./PeopleItem";
 
-// const PEOPLES = [
-//     {
-//         name: "SHRI HARI L (You)",
-//         image: "https://lh3.googleusercontent.com/a-/AOh14GhinDC_5_G9VLzmIbRW5L0d8f6w6Kg92VxIKWSu=s32-p-k-no-mo"
-//     },
-//     {
-//         name: "AJAY KOUSHIK K N",
-//         image: "https://ssl.gstatic.com/s2/profiles/images/silhouette48.png"
-//     },
-//     {
-//         name: "NITHARSHAN D J",
-//         image: "https://lh3.googleusercontent.com/a-/AOh14GgZZcv8W-Rj-Jf2bUbhCZoUi6YwA-JLIRC5gbGilw=s48"
-//     },
-//     {
-//         name: "MOHAMED NOWFAL A",
-//         image: "https://lh3.googleusercontent.com/a-/AOh14GiHGcX9JS2WAZNKoMfDEN2o7bP8mu-XIOijnxbBVw=s48"
-//     },
-//     {
-//         name: "NAVEEN KUMAR A",
-//         image: "https://lh3.googleusercontent.com/a-/AOh14GgKgw-L-3JghYAY7VEU-d9LfokgR5mKVC5OeWe4kA=s48"
-//     }
-// ]
-
 const PeopleList = ({ onClose, currentUser, participants }) => {
     return (
         <>
@@ -74,7 +51,7 @@ const PeopleList = ({ onClose, currentUser, participants }) => {
 
 const mapStateToProps = state => ({
     currentUser: state.auth,
-    participants: state.call.participants
+    participants: state.call.participants.filter(e => e.id !== state.auth.id),
 })
 
 export default connect(mapStateToProps)(PeopleList);
