@@ -48,8 +48,8 @@ const ChatList = ({ onClose, messages, currentUser }) => {
             </div>
             <div className="p-3 w-full relative">
                 <form onSubmit={handleSendMessage}>
-
                     <input
+                        autoFocus
                         value={message}
                         onChange={({ target: { value } }) => setMessage(value)}
                         placeholder="Send a message to everyone"
