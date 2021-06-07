@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CallOptionButton from './../components/Call/CallOptionButton';
 import CallActionButton from './../components/Call/CallActionButton';
 import Time from './../components/Shared/Time';
@@ -12,9 +12,9 @@ import { isValidMeetId } from "./../utils/validator"
 import { useHistory } from 'react-router-dom';
 import { Helmet } from "react-helmet"
 import { connect } from 'react-redux';
-import { addMessage, resetCall } from '../database/call';
-import { useEffect } from 'react';
+import { addMessage, resetCall, updateParticipants, addParticipant, removeParticipant } from '../database/call';
 import socket from "./../utils/socket"
+import { database } from "./../utils/firebase"
 
 const TABS = {
     NO_SIDEBAR: "no_sidebar",
@@ -25,7 +25,7 @@ const TABS = {
     SECURITY: "security"
 }
 
-const CallPage = ({ match, participants, addMessage, endCall }) => {
+const CallPage = ({ match, participants, addMessage, endCall, currentUser, updateParticipants, addParticipant, removeParticipant }) => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(TABS.NO_SIDEBAR);
     const pageRouter = useHistory();
@@ -33,18 +33,34 @@ const CallPage = ({ match, participants, addMessage, endCall }) => {
 
     useEffect(() => {
         if (isValidMeetId(meetId)) {
-            socket.emit("joinCall", JSON.stringify({
-                meetId
-            }))
+            socket.emit("joinCall", JSON.stringify({ meetId }))
             socket.off("newMessage");
             socket.on("newMessage", (data) => {
                 const payload = JSON.parse(data)
                 addMessage(payload)
             })
+            const meetRef = database.ref().child(meetId)
+            meetRef.child(currentUser.id).set(currentUser);
+            meetRef.child(currentUser.id).onDisconnect().remove();
+            meetRef.get().then((result) => {
+                updateParticipants(result.val())
+            })
+            meetRef.on("child_added", (_) => {
+                addParticipant(_.val())
+            })
+            meetRef.on("child_removed", (_) => {
+                removeParticipant(_.val())
+            })
+            meetRef.on("child_changed", (_) => {
+                console.log("Something Changed!", _.val());
+            })
         }
         return () => {
-            endCall()
+            const meetRef = database.ref().child(meetId)
+            meetRef.child(currentUser.id).remove();
+            meetRef.off()
             socket.off("newMessage");
+            endCall()
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -173,12 +189,15 @@ const CallPage = ({ match, participants, addMessage, endCall }) => {
 
 const mapStateToProps = state => ({
     currentUser: state.auth,
-    participants: state.call.participants,
+    participants: state.call.participants.filter(e => e.id !== state.auth.id),
 })
 
 const mapDispatchToProps = dispatch => ({
     endCall: () => dispatch(resetCall()),
-    addMessage: (e) => dispatch(addMessage(e))
+    addMessage: (e) => dispatch(addMessage(e)),
+    updateParticipants: (e) => dispatch(updateParticipants(e)),
+    addParticipant: (e) => dispatch(addParticipant(e)),
+    removeParticipant: (e) => dispatch(removeParticipant(e)),
 })
 
 

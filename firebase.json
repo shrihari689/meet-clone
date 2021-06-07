@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "meet-clone-shrihari689",
     "public": "build",
     "ignore": [
       "firebase.json",
