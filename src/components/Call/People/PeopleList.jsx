@@ -26,7 +26,7 @@ const PeopleList = ({ onClose, currentUser, participants }) => {
                     <div className="flex flex-col">
                         < PeopleItem
                             key={-1}
-                            details={currentUser}
+                            details={{ ...currentUser, name: currentUser.name + " (You)" }}
                             onMute={(_) => { }}
                             onPin={(_) => { }}
                         />
