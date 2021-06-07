@@ -1,11 +1,17 @@
 import SidebarHeader from "../Shared/SidebarHeader";
 import CopyClipboard from './../../Shared/CopyClipboard';
+import { HOST } from "./../../../utils/config"
 
 const CallInfo = ({ onClose }) => {
 
+    const generateRandomPhoneNumber = () => {
+        const pattern = [["*", "*", "*", "*"], ["*", "*", "*", "*", "*"]]
+        return pattern.map(e => e.map(_ => Math.floor(Math.random() * 9)).join("")).join(" ")
+    }
+
     const details = {
-        url: "https://meet.google.com/obo-qpck-cbz",
-        dialIn: "(IN) +91 957868 5557",
+        url: HOST + window?.location?.pathname,
+        dialIn: "(IN) +91 9" + generateRandomPhoneNumber(),
         pin: `${Math.floor(Math.random() * 999)} ${Math.floor(Math.random() * 999)} ${Math.floor(Math.random() * 999)}#`
     }
 
@@ -19,7 +25,7 @@ const CallInfo = ({ onClose }) => {
                 <div><span className="text-xs font-semibold">PIN:</span> {details.pin}</div>
             </section>
             <CopyClipboard
-                text="https://meet.google.com/obo-qpck-cbz"
+                text={details.url}
                 displayText="📄 Copy joining info"
                 position="-bottom-8 left-16"
                 className="cursor-pointer bg-gray-100 text-indigo-800 rounded-md hover:bg-gray-200 px-5 py-2"
