@@ -16,9 +16,18 @@ import { addMessage, resetCall } from '../database/call';
 import { useEffect } from 'react';
 import socket from "./../utils/socket"
 
+const TABS = {
+    NO_SIDEBAR: "no_sidebar",
+    INFO: "info",
+    PEOPLE: "people",
+    CHAT: "chat",
+    ACTIVITIES: "activities",
+    SECURITY: "security"
+}
+
 const CallPage = ({ match, participants, addMessage, endCall }) => {
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState("no_sidebar");
+    const [isSidebarOpen, setIsSidebarOpen] = useState(TABS.NO_SIDEBAR);
     const pageRouter = useHistory();
     const { params: { id: meetId } } = match;
 
@@ -45,13 +54,13 @@ const CallPage = ({ match, participants, addMessage, endCall }) => {
 
     const handleChangeCallOption = (option) => {
         setIsSidebarOpen(prev => {
-            if (prev === option) return "no_sidebar";
+            if (prev === option) return TABS.NO_SIDEBAR;
             return option;
         })
     }
 
     const handleCloseSidebar = () => {
-        handleChangeCallOption("no_sidebar")
+        handleChangeCallOption(TABS.NO_SIDEBAR)
     }
 
     return (
@@ -69,11 +78,11 @@ const CallPage = ({ match, participants, addMessage, endCall }) => {
                     </div>
                     <div className="w-full flex justify-start text-white text-sm">You</div>
                 </div>
-                <Sidebar isOpen={isSidebarOpen !== "no_sidebar"}>
-                    {isSidebarOpen === "info" && <CallInfo onClose={handleCloseSidebar} />}
-                    {isSidebarOpen === "people" && <PeopleList onClose={handleCloseSidebar} />}
-                    {isSidebarOpen === "chat" && <ChatList onClose={handleCloseSidebar} />}
-                    {isSidebarOpen === "activities" && <CallActivities onClose={handleCloseSidebar} />}
+                <Sidebar isOpen={isSidebarOpen !== TABS.NO_SIDEBAR}>
+                    {isSidebarOpen === TABS.INFO && <CallInfo onClose={handleCloseSidebar} />}
+                    {isSidebarOpen === TABS.PEOPLE && <PeopleList onClose={handleCloseSidebar} />}
+                    {isSidebarOpen === TABS.CHAT && <ChatList onClose={handleCloseSidebar} />}
+                    {isSidebarOpen === TABS.ACTIVITIES && <CallActivities onClose={handleCloseSidebar} />}
                 </Sidebar>
             </div>
             <div className="absolute bottom-0 left-0 w-full bg-gray-900 flex flex-col space-y-2 md:flex-row items-center justify-between text-sm text-white px-3 pb-3">
@@ -124,16 +133,16 @@ const CallPage = ({ match, participants, addMessage, endCall }) => {
                 <div className="flex items-center">
                     <CallOptionButton
                         title="Info"
-                        iconSet={(isSidebarOpen === "info") ? "material-icons" : "google-material-icons"}
+                        iconSet={(isSidebarOpen === TABS.INFO) ? "material-icons" : "google-material-icons"}
                         icon="info"
-                        onClick={(_) => handleChangeCallOption("info")}
+                        onClick={(_) => handleChangeCallOption(TABS.INFO)}
                     />
                     <div className="flex items-center justify-center relative">
                         <CallOptionButton
                             title="Participants"
                             icon="group"
-                            iconSet={(isSidebarOpen === "people") ? "material-icons" : "google-material-icons"}
-                            onClick={(_) => handleChangeCallOption("people")} />
+                            iconSet={(isSidebarOpen === TABS.PEOPLE) ? "material-icons" : "google-material-icons"}
+                            onClick={(_) => handleChangeCallOption(TABS.PEOPLE)} />
                         <div
                             style={{ fontSize: "0.6rem" }}
                             className="absolute -top-1 right-0 p-1 h-4 bg-red-700 text-xs text-white flex items-center justify-center rounded-full">
@@ -143,17 +152,17 @@ const CallPage = ({ match, participants, addMessage, endCall }) => {
                     <CallOptionButton
                         title="Chat"
                         icon="chat"
-                        iconSet={(isSidebarOpen === "chat") ? "material-icons" : "google-material-icons"}
-                        onClick={(_) => handleChangeCallOption("chat")} />
+                        iconSet={(isSidebarOpen === TABS.CHAT) ? "material-icons" : "google-material-icons"}
+                        onClick={(_) => handleChangeCallOption(TABS.CHAT)} />
                     <CallOptionButton
                         title="Activities"
                         iconSet="google-material-icons"
                         icon="themes"
-                        onClick={(_) => handleChangeCallOption("activities")}
+                        onClick={(_) => handleChangeCallOption(TABS.ACTIVITIES)}
                     />
                     <CallOptionButton
                         title="Host Controls"
-                        iconSet={(isSidebarOpen === "controls") ? "material-icons" : "google-material-icons"}
+                        iconSet={(isSidebarOpen === TABS.SECURITY) ? "material-icons" : "google-material-icons"}
                         icon="security"
                     />
                 </div>
