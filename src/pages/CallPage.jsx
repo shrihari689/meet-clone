@@ -84,15 +84,24 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
             <Helmet>
                 <title>{meetId} - Google Meet Clone | @shrihari689</title>
             </Helmet>
-            <div className="w-full h-screen flex p-3 pb-14">
-                <div className="flex-col items-center justify-between flex-1 px-2 flex">
-                    <div className="w-full flex justify-end">
-                        <i className="material-icons text-white" style={{ fontSize: '16px' }}>mic_off</i>
-                    </div>
-                    <div className="flex items-center justify-center flex-1 w-full">
-                        <img className="h-18 w-18 rounded-full" src="https://lh3.googleusercontent.com/a-/AOh14GhinDC_5_G9VLzmIbRW5L0d8f6w6Kg92VxIKWSu=s120-p-k-no-mo" alt="Shri Hari L" />
-                    </div>
-                    <div className="w-full flex justify-start text-white text-sm">You</div>
+            <div className="w-full h-screen flex p-3 pb-28 md:pb-14">
+                <div className="flex-1 w-full px-2 flex flex-wrap">
+                    {
+                        participants.map(e => (
+                            <div
+                                key={e.id}
+                                className="call-card flex flex-1 m-2 flex-col items-center justify-between border-gray-700 border-opacity-50 border-4 p-3 rounded-md"
+                            >
+                                <div className="w-full flex justify-end">
+                                    <i className="material-icons text-white" style={{ fontSize: '16px' }}>mic_off</i>
+                                </div>
+                                <img className="h-18 w-18 rounded-full" src={e.image} alt={e.name} />
+                                <div className="w-full flex justify-start text-gray-300 font-medium text-sm">{currentUser.id === e.id ? "You" : e.name}</div>
+                            </div>
+                        ))
+                    }
+
+
                 </div>
                 <Sidebar isOpen={isSidebarOpen !== TABS.NO_SIDEBAR}>
                     {isSidebarOpen === TABS.INFO && <CallInfo onClose={handleCloseSidebar} />}
@@ -162,7 +171,7 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
                         <div
                             style={{ fontSize: "0.6rem" }}
                             className="absolute -top-1 right-0 p-1 h-4 bg-red-700 text-xs text-white flex items-center justify-center rounded-full">
-                            {participants.length + 1}
+                            {participants.length}
                         </div>
                     </div>
                     <CallOptionButton
@@ -189,7 +198,7 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
 
 const mapStateToProps = state => ({
     currentUser: state.auth,
-    participants: state.call.participants.filter(e => e.id !== state.auth.id),
+    participants: state.call.participants,
 })
 
 const mapDispatchToProps = dispatch => ({

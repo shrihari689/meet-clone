@@ -23,3 +23,13 @@
 body {
   font-family: "Roboto";
 }
+.call-card {
+  min-width: 400px;
+}
+@media only screen and (max-width: 400px) {
+  .call-card {
+    min-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
