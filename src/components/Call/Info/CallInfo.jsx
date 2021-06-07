@@ -30,7 +30,7 @@ const CallInfo = ({ onClose }) => {
                 position="-bottom-8 left-16"
                 className="cursor-pointer bg-gray-100 text-indigo-800 rounded-md hover:bg-gray-200 px-5 py-2"
             />
-            <div className="flex-1 border-t-2 mt-10  border-gray-300 w-full"></div>
+            <div className="flex-1 border-t-2 mt-10 border-gray-300 w-11/12"></div>
         </>
     );
 }

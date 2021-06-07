@@ -36,7 +36,7 @@ const CopyClipboard = ({ text, className, displayText, position = "-top-8" }) =>
     }
 
     return (
-        <div className="flex items-center relative">
+        <div className="flex items-center relative select-none">
             {isCopied && (
                 <div className={`absolute ${position} left-0 bg-indigo-600 px-3 py-1 text-xs rounded-md text-gray-300`}>
                     Copied!
