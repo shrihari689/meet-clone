@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { addMessage, resetCall, updateParticipants, addParticipant, removeParticipant } from '../database/call';
 import socket from "./../utils/socket"
 import { database } from "./../utils/firebase"
+import { getOrderedPeoples } from '../utils/general';
 
 const TABS = {
     NO_SIDEBAR: "no_sidebar",
@@ -31,7 +32,12 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
     const pageRouter = useHistory();
     const { params: { id: meetId } } = match;
 
+    if (!isValidMeetId(meetId)) {
+        pageRouter.replace("/");
+    }
+
     useEffect(() => {
+        let refId = "";
         if (isValidMeetId(meetId)) {
             socket.emit("joinCall", JSON.stringify({ meetId }))
             socket.off("newMessage");
@@ -40,8 +46,9 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
                 addMessage(payload)
             })
             const meetRef = database.ref().child(meetId)
-            meetRef.child(currentUser.id).set(currentUser);
-            meetRef.child(currentUser.id).onDisconnect().remove();
+            refId = meetRef.push().key;
+            meetRef.child(refId).set({ ...currentUser, refId });
+            meetRef.child(refId).onDisconnect().remove();
             meetRef.get().then((result) => {
                 updateParticipants(result.val())
             })
@@ -56,17 +63,17 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
             })
         }
         return () => {
-            const meetRef = database.ref().child(meetId)
-            meetRef.child(currentUser.id).remove();
-            meetRef.off()
-            socket.off("newMessage");
-            endCall()
+            if (isValidMeetId(meetId)) {
+                const meetRef = database.ref().child(meetId)
+                meetRef.child(refId)?.remove();
+                meetRef.off()
+                socket.off("newMessage");
+                endCall()
+            }
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    if (!isValidMeetId(meetId)) {
-        pageRouter.replace("/");
-    }
+    const orderedPeoples = getOrderedPeoples(participants, currentUser)
 
     const handleChangeCallOption = (option) => {
         setIsSidebarOpen(prev => {
@@ -87,21 +94,19 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
             <div className="w-full h-screen flex p-3 pb-28 md:pb-14">
                 <div className="flex-1 w-full px-2 flex flex-wrap">
                     {
-                        participants.map(e => (
+                        orderedPeoples.map((e, i) =>
                             <div
-                                key={e.id}
-                                className="call-card flex flex-1 m-2 flex-col items-center justify-between border-gray-700 border-opacity-50 border-4 p-3 rounded-md"
+                                key={e.refId}
+                                className="call-card flex flex-1 m-2 flex-col items-center justify-between bg-gray-800 p-3 rounded-md"
                             >
                                 <div className="w-full flex justify-end">
                                     <i className="material-icons text-white" style={{ fontSize: '16px' }}>mic_off</i>
                                 </div>
                                 <img className="h-18 w-18 rounded-full" src={e.image} alt={e.name} />
-                                <div className="w-full flex justify-start text-gray-300 font-medium text-sm">{currentUser.id === e.id ? "You" : e.name}</div>
+                                <div className="w-full flex justify-start text-gray-300 font-medium text-sm">{e.name}</div>
                             </div>
-                        ))
+                        )
                     }
-
-
                 </div>
                 <Sidebar isOpen={isSidebarOpen !== TABS.NO_SIDEBAR}>
                     {isSidebarOpen === TABS.INFO && <CallInfo onClose={handleCloseSidebar} />}
@@ -171,7 +176,7 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
                         <div
                             style={{ fontSize: "0.6rem" }}
                             className="absolute -top-1 right-0 p-1 h-4 bg-red-700 text-xs text-white flex items-center justify-center rounded-full">
-                            {participants.length}
+                            {orderedPeoples.length}
                         </div>
                     </div>
                     <CallOptionButton

@@ -23,8 +23,7 @@ const callSlice = createSlice({
             state.participants.sort()
         },
         removeParticipant: (state, { payload }) => {
-            state.participants = state.participants.filter(e => e.id !== payload.id)
-            state.participants.sort()
+            state.participants = state.participants.filter(e => e.refId !== payload.refId)
         },
         resetCall: _ => Call
     }

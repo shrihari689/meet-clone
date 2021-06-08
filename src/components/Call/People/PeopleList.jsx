@@ -1,8 +1,12 @@
 import { connect } from "react-redux";
+import { getOrderedPeoples } from "../../../utils/general";
 import SidebarHeader from "../Shared/SidebarHeader";
 import PeopleItem from "./PeopleItem";
 
 const PeopleList = ({ onClose, currentUser, participants }) => {
+
+    const orderedPeoples = getOrderedPeoples(participants, currentUser)
+
     return (
         <>
             <SidebarHeader title="People" onClose={onClose} />
@@ -24,15 +28,8 @@ const PeopleList = ({ onClose, currentUser, participants }) => {
                 <section className="w-full px-3 pl-4 flex-1">
                     <h2 className="font-semibold my-2 text-gray-600" style={{ fontSize: "0.7rem" }}>IN CALL</h2>
                     <div className="flex flex-col">
-                        < PeopleItem
-                            key={-1}
-                            details={{ ...currentUser, name: currentUser.name + " (You)" }}
-                            onMute={(_) => { }}
-                            onPin={(_) => { }}
-                        />
                         {
-                            participants
-                                .sort((a, b) => a.name < b.name ? -1 : 1)
+                            orderedPeoples
                                 .map((people, i) =>
                                     < PeopleItem
                                         key={i}
@@ -51,7 +48,7 @@ const PeopleList = ({ onClose, currentUser, participants }) => {
 
 const mapStateToProps = state => ({
     currentUser: state.auth,
-    participants: state.call.participants.filter(e => e.id !== state.auth.id),
+    participants: state.call.participants,
 })
 
 export default connect(mapStateToProps)(PeopleList);
