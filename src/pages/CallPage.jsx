@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import CallOptionButton from './../components/Call/CallOptionButton';
-import CallActionButton from './../components/Call/CallActionButton';
 import Time from './../components/Shared/Time';
 import PeopleList from './../components/Call/People/PeopleList';
 import ChatList from './../components/Call/Chat/ChatList';
@@ -12,23 +11,38 @@ import { isValidMeetId } from "./../utils/validator"
 import { useHistory } from 'react-router-dom';
 import { Helmet } from "react-helmet"
 import { connect } from 'react-redux';
-import { addMessage, resetCall, updateParticipants, addParticipant, removeParticipant } from '../database/call';
+import { resetCall, updateParticipants, addParticipant, removeParticipant, setCallInfo, updateParticipant, setIsSidebarOpen } from '../database/call';
 import socket from "./../utils/socket"
 import { database } from "./../utils/firebase"
 import { getOrderedPeoples } from '../utils/general';
+import MicButton from '../components/Call/Icons/MicButton';
+import VideoButton from '../components/Call/Icons/VideoButton';
+import CaptionsButton from '../components/Call/Icons/CaptionsButton';
+import RaiseHandButton from '../components/Call/Icons/RaiseHandButton';
+import ShareScreenButton from '../components/Call/Icons/ShareScreenButton';
+import MoreButton from '../components/Call/Icons/MoreButton';
+import EndCallButton from '../components/Call/Icons/EndCallButton';
+import CallPeopleItem from '../components/Call/CallPeopleItem';
+import { playJoiningSound, playLeavingSound } from '../utils/sounds';
+import { TABS } from '../database/entities';
+import ChatIcon from '../components/Call/Icons/ChatIcon';
 
-const TABS = {
-    NO_SIDEBAR: "no_sidebar",
-    INFO: "info",
-    PEOPLE: "people",
-    CHAT: "chat",
-    ACTIVITIES: "activities",
-    SECURITY: "security"
-}
+const CallPage = ({
+    match,
+    refId,
+    participants,
+    endCall,
+    currentUser,
+    updateParticipant,
+    updateParticipants,
+    addParticipant,
+    setCallInfo,
+    removeParticipant,
+    hasUnseenMessages,
+    isSidebarOpen,
+    setIsSidebarOpen
+}) => {
 
-const CallPage = ({ match, participants, addMessage, endCall, currentUser, updateParticipants, addParticipant, removeParticipant }) => {
-
-    const [isSidebarOpen, setIsSidebarOpen] = useState(TABS.NO_SIDEBAR);
     const pageRouter = useHistory();
     const { params: { id: meetId } } = match;
 
@@ -39,15 +53,14 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
     useEffect(() => {
         let refId = "";
         if (isValidMeetId(meetId)) {
-            socket.emit("joinCall", JSON.stringify({ meetId }))
-            socket.off("newMessage");
-            socket.on("newMessage", (data) => {
-                const payload = JSON.parse(data)
-                addMessage(payload)
-            })
             const meetRef = database.ref().child(meetId)
             refId = meetRef.push().key;
-            meetRef.child(refId).set({ ...currentUser, refId });
+            meetRef.child(refId).set({
+                ...currentUser,
+                isMicOn: false,
+                isCamOn: false,
+                refId,
+            });
             meetRef.child(refId).onDisconnect().remove();
             meetRef.get().then((result) => {
                 updateParticipants(result.val())
@@ -59,8 +72,13 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
                 removeParticipant(_.val())
             })
             meetRef.on("child_changed", (_) => {
-                console.log("Something Changed!", _.val());
+                updateParticipant(_.val());
             })
+            setCallInfo({
+                refId,
+                meetId
+            });
+            playJoiningSound();
         }
         return () => {
             if (isValidMeetId(meetId)) {
@@ -69,17 +87,15 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
                 meetRef.off()
                 socket.off("newMessage");
                 endCall()
+                playLeavingSound()
             }
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const orderedPeoples = getOrderedPeoples(participants, currentUser)
+    const orderedPeoples = getOrderedPeoples(participants, refId)
 
     const handleChangeCallOption = (option) => {
-        setIsSidebarOpen(prev => {
-            if (prev === option) return TABS.NO_SIDEBAR;
-            return option;
-        })
+        setIsSidebarOpen(option)
     }
 
     const handleCloseSidebar = () => {
@@ -94,17 +110,8 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
             <div className="w-full h-screen flex p-3 pb-28 md:pb-14">
                 <div className="flex-1 w-full px-2 flex flex-wrap">
                     {
-                        orderedPeoples.map((e, i) =>
-                            <div
-                                key={e.refId}
-                                className="call-card flex flex-1 m-2 flex-col items-center justify-between bg-gray-800 p-3 rounded-md"
-                            >
-                                <div className="w-full flex justify-end">
-                                    <i className="material-icons text-white" style={{ fontSize: '16px' }}>mic_off</i>
-                                </div>
-                                <img className="h-18 w-18 rounded-full" src={e.image} alt={e.name} />
-                                <div className="w-full flex justify-start text-gray-300 font-medium text-sm">{e.name}</div>
-                            </div>
+                        orderedPeoples.map((e) =>
+                            <CallPeopleItem key={e.refId} {...e} currentRefId={refId} />
                         )
                     }
                 </div>
@@ -122,43 +129,13 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
                     <CopyClipboard text={meetId} displayText={meetId} className="cursor-pointer" />
                 </div>
                 <div className="flex items-center">
-                    <CallActionButton
-                        title="Audio on/off"
-                        icon="mic_off"
-                        active={true}
-                    />
-                    <CallActionButton
-                        title="Video on/off"
-                        icon="videocam_off"
-                        active={true}
-                    />
-                    <CallActionButton
-                        title="Closed Caption"
-                        icon="closed_caption"
-                        active={false}
-                    />
-                    <CallActionButton
-                        title="Raise Hands"
-                        icon="pan_tool"
-                        active={false}
-                    />
-                    <CallActionButton
-                        title="Share Screen"
-                        icon="present_to_all"
-                        active={false}
-                    />
-                    <CallActionButton
-                        title="More"
-                        icon="more_vert"
-                        active={false}
-                    />
-                    <CallActionButton
-                        onClick={(_) => { pageRouter.push("home") }}
-                        title="Leave Call"
-                        icon="call_end"
-                        className="w-14"
-                        active={true}
-                    />
+                    <MicButton />
+                    <VideoButton />
+                    <CaptionsButton />
+                    <RaiseHandButton />
+                    <ShareScreenButton />
+                    <MoreButton />
+                    <EndCallButton />
                 </div>
                 <div className="flex items-center">
                     <CallOptionButton
@@ -179,11 +156,10 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
                             {orderedPeoples.length}
                         </div>
                     </div>
-                    <CallOptionButton
-                        title="Chat"
-                        icon="chat"
-                        iconSet={(isSidebarOpen === TABS.CHAT) ? "material-icons" : "google-material-icons"}
-                        onClick={(_) => handleChangeCallOption(TABS.CHAT)} />
+                    <ChatIcon
+                        isSidebarOpen={isSidebarOpen}
+                        setIsSidebarOpen={setIsSidebarOpen}
+                    />
                     <CallOptionButton
                         title="Activities"
                         iconSet="google-material-icons"
@@ -203,15 +179,20 @@ const CallPage = ({ match, participants, addMessage, endCall, currentUser, updat
 
 const mapStateToProps = state => ({
     currentUser: state.auth,
+    refId: state.call.refId,
+    hasUnseenMessages: state.call.hasUnseenMessages,
     participants: state.call.participants,
+    isSidebarOpen: state.call.isSidebarOpen
 })
 
 const mapDispatchToProps = dispatch => ({
+    setCallInfo: e => dispatch(setCallInfo(e)),
     endCall: () => dispatch(resetCall()),
-    addMessage: (e) => dispatch(addMessage(e)),
+    updateParticipant: (e) => dispatch(updateParticipant(e)),
     updateParticipants: (e) => dispatch(updateParticipants(e)),
     addParticipant: (e) => dispatch(addParticipant(e)),
     removeParticipant: (e) => dispatch(removeParticipant(e)),
+    setIsSidebarOpen: e => dispatch(setIsSidebarOpen(e)),
 })
 
 

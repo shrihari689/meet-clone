@@ -48,15 +48,21 @@ const ChatList = ({ onClose, messages, currentUser }) => {
             </div>
             <div className="p-3 w-full relative">
                 <form onSubmit={handleSendMessage}>
-                    <input
+                    <textarea
                         autoFocus
                         value={message}
+                        onKeyDown={(event) => {
+                            if (event.key === "Enter" && !event.shiftKey) {
+                                handleSendMessage(event);
+                            }
+                        }}
+                        style={{ maxHeight: "2.25rem", minHeight: "" }}
                         onChange={({ target: { value } }) => setMessage(value)}
                         placeholder="Send a message to everyone"
-                        className="w-full bg-gray-100 rounded-full py-2 pl-3 pr-10 outline-none placeholder-gray-500 text-sm"
+                        className="w-full resize-none bg-gray-100 rounded-full py-2 pl-3 pr-10 outline-none placeholder-gray-500 text-sm"
                         type="text"
                     />
-                    <button className="google-material-icons cursor-pointer absolute top-5 right-6 text-gray-500" style={{ fontSize: '16px' }}>send</button>
+                    <button className="google-material-icons cursor-pointer focus:outline-none absolute top-5 right-6 text-gray-500" style={{ fontSize: '16px' }}>send</button>
                 </form>
             </div>
         </>
