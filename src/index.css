@@ -32,3 +32,35 @@ body {
     width: 50px;
   }
 }
+
+.animate-mic {
+  animation: animate1 0s ease-in-out infinite;
+  animation-direction: alternate;
+}
+
+.animate-mic-1 {
+  animation-duration: 0.5s;
+  animation-delay: 0.3s;
+}
+
+.animate-mic-2 {
+  animation-duration: 0.8s;
+  animation-delay: 0.2s;
+}
+
+.animate-mic-3 {
+  animation-duration: 0.3s;
+  animation-delay: 0.5s;
+}
+
+@keyframes animate1 {
+  0% {
+    @apply h-1;
+  }
+  50% {
+    @apply h-2;
+  }
+  100% {
+    @apply h-3;
+  }
+}
