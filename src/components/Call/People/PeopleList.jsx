@@ -3,9 +3,9 @@ import { getOrderedPeoples } from "../../../utils/general";
 import SidebarHeader from "../Shared/SidebarHeader";
 import PeopleItem from "./PeopleItem";
 
-const PeopleList = ({ onClose, currentUser, participants }) => {
+function PeopleList({ onClose, refId, participants }) {
 
-    const orderedPeoples = getOrderedPeoples(participants, currentUser)
+    const orderedPeoples = getOrderedPeoples(participants, refId);
 
     return (
         <>
@@ -28,17 +28,13 @@ const PeopleList = ({ onClose, currentUser, participants }) => {
                 <section className="w-full px-3 pl-4 flex-1">
                     <h2 className="font-semibold my-2 text-gray-600" style={{ fontSize: "0.7rem" }}>IN CALL</h2>
                     <div className="flex flex-col">
-                        {
-                            orderedPeoples
-                                .map((people, i) =>
-                                    < PeopleItem
-                                        key={i}
-                                        details={people}
-                                        onMute={(_) => { }}
-                                        onPin={(_) => { }}
-                                    />
-                                )
-                        }
+                        {orderedPeoples
+                            .map((people, i) => <PeopleItem
+                                key={i}
+                                details={people}
+                                onMute={(_) => { }}
+                                onPin={(_) => { }} />
+                            )}
                     </div>
                 </section>
             </div>
@@ -48,6 +44,7 @@ const PeopleList = ({ onClose, currentUser, participants }) => {
 
 const mapStateToProps = state => ({
     currentUser: state.auth,
+    refId: state.call.refId,
     participants: state.call.participants,
 })
 

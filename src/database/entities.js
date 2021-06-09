@@ -12,10 +12,24 @@ export const Message = {
     time: ""
 }
 
+export const TABS = {
+    NO_SIDEBAR: "no_sidebar",
+    INFO: "info",
+    PEOPLE: "people",
+    CHAT: "chat",
+    ACTIVITIES: "activities",
+    SECURITY: "security"
+}
+
 export const Call = {
     host: User,
     isHost: false,
     chats: [],
-    lastSeenMessage: [],
+    refId: "",
+    meetId: "",
+    isMicOn: false,
+    isCamOn: false,
+    isSidebarOpen: TABS.NO_SIDEBAR,
+    hasUnseenMessages: false,
     participants: []
 }
