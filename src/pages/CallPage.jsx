@@ -102,8 +102,6 @@ const CallPage = ({
         handleChangeCallOption(TABS.NO_SIDEBAR)
     }
 
-    console.log("Rendering");
-
     return (
         <main className="h-screen w-full flex flex-col justify-between bg-gray-900 overflow-hidden">
             <Helmet>
