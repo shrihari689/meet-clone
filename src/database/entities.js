@@ -22,7 +22,7 @@ export const TABS = {
 }
 
 export const Call = {
-    host: User,
+    host: "",
     isHost: false,
     chats: [],
     refId: "",

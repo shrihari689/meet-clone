@@ -22,7 +22,7 @@ const HomeCarousel = () => {
                 if (prev === (CONTENTS.length - 1)) return 0;
                 return prev + 1;
             })
-        }, 2000)
+        }, 3000)
         return () => {
             clearInterval(intervalId);
         }
