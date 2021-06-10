@@ -22,8 +22,9 @@ export const TABS = {
 }
 
 export const Call = {
-    host: "",
+    hostId: "",
     isHost: false,
+    isChatDisabled: false,
     chats: [],
     refId: "",
     meetId: "",

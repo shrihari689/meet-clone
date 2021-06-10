@@ -1,8 +1,9 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { addMessage } from '../../../database/call';
+import { addMessage, updateMeetSettings } from '../../../database/call';
 import { TABS } from '../../../database/entities';
+import { getMeetRef } from '../../../database/fires';
 import socket from '../../../utils/socket';
 import { isValidMeetId } from '../../../utils/validator';
 
@@ -11,7 +12,8 @@ const ChatIcon = ({
     isSidebarOpen,
     hasUnseenMessages,
     setIsSidebarOpen,
-    addMessage
+    addMessage,
+    updateMeetSettings
 }) => {
 
     useEffect(() => {
@@ -22,6 +24,18 @@ const ChatIcon = ({
                 const payload = JSON.parse(data)
                 addMessage(payload)
             })
+            getMeetRef(meetId).on("child_changed", (data) => {
+                const { key } = data;
+                updateMeetSettings({
+                    [key]: data.val()
+                })
+            })
+        }
+
+        return () => {
+            if (isValidMeetId(meetId)) {
+                getMeetRef(meetId).off()
+            }
         }
     }, [meetId]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -55,6 +69,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     addMessage: e => dispatch(addMessage(e)),
+    updateMeetSettings: e => dispatch(updateMeetSettings(e)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatIcon);

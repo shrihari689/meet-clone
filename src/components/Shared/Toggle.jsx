@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { connect } from "react-redux";
+import { getMeetRef } from "../../database/fires";
 
-const ToggleButton = ({ on, onChange }) => {
-
-    const [isActive, setIsActive] = useState(on);
+const ToggleButton = ({ meetId, isActive }) => {
 
     const handleToggle = (_) => {
-        setIsActive(prev => !prev);
-        onChange(!isActive);
+        getMeetRef(meetId).update({
+            isChatDisabled: isActive
+        })
     }
 
     return (
@@ -18,4 +18,9 @@ const ToggleButton = ({ on, onChange }) => {
     );
 }
 
-export default ToggleButton;
+const mapStateToProps = state => ({
+    meetId: state.call.meetId,
+    isActive: !state.call.isChatDisabled
+})
+
+export default connect(mapStateToProps)(ToggleButton);

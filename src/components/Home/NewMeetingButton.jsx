@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import firebase, { database } from "../../utils/firebase";
+import { createNewMeeting } from "../../database/fires";
 import { generateNewMeetId } from "../../utils/validator";
 
 const NewMeetingButton = ({ currentUser }) => {
@@ -12,14 +12,7 @@ const NewMeetingButton = ({ currentUser }) => {
     const handleNewMeeting = (_) => {
         setIsLoading(true);
         const newId = generateNewMeetId()
-        database.ref().child("Meetings").child(newId).onDisconnect().update({
-            adminDisconnected: true
-        })
-        database.ref().child("Meetings").child(newId).set({
-            meetId: newId,
-            meetHost: currentUser.id,
-            createdAt: firebase.database.ServerValue.TIMESTAMP
-        }).then(_ => {
+        createNewMeeting(newId, currentUser.id).then(_ => {
             setIsLoading(false);
             pageRouter.push(newId);
         }).catch(_ => {

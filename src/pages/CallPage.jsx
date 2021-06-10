@@ -26,6 +26,7 @@ import CallPeopleItem from '../components/Call/CallPeopleItem';
 import { playJoiningSound, playLeavingSound } from '../utils/sounds';
 import { TABS } from '../database/entities';
 import ChatIcon from '../components/Call/Icons/ChatIcon';
+import HostControlsIcon from '../components/Call/Icons/HostControlsIcon';
 
 const CallPage = ({
     match,
@@ -38,7 +39,6 @@ const CallPage = ({
     addParticipant,
     setCallInfo,
     removeParticipant,
-    hasUnseenMessages,
     isSidebarOpen,
     setIsSidebarOpen
 }) => {
@@ -166,10 +166,9 @@ const CallPage = ({
                         icon="themes"
                         onClick={(_) => handleChangeCallOption(TABS.ACTIVITIES)}
                     />
-                    <CallOptionButton
-                        title="Host Controls"
-                        iconSet={(isSidebarOpen === TABS.SECURITY) ? "material-icons" : "google-material-icons"}
-                        icon="security"
+                    <HostControlsIcon
+                        isSidebarOpen={isSidebarOpen}
+                        setIsSidebarOpen={setIsSidebarOpen}
                     />
                 </div>
             </div>

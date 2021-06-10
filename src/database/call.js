@@ -10,6 +10,11 @@ const callSlice = createSlice({
             state.refId = payload.refId
             state.meetId = payload.meetId
         },
+        setHostInfo: (state, { payload }) => {
+            state.hostId = payload.hostId
+            state.isHost = payload.isHost
+            state.isChatDisabled = payload.isChatDisabled
+        },
         addMessage: (state, { payload }) => {
             state.chats.push(payload)
             const isUnseenState = state.isSidebarOpen !== TABS.CHAT
@@ -52,6 +57,11 @@ const callSlice = createSlice({
             else
                 state.isSidebarOpen = payload
         },
+        updateMeetSettings: (state, { payload }) => {
+            const { isChatDisabled } = payload
+            if (isChatDisabled !== undefined)
+                state.isChatDisabled = isChatDisabled
+        },
         resetCall: _ => Call
     }
 })
@@ -59,6 +69,7 @@ const callSlice = createSlice({
 export const
     {
         setCallInfo,
+        setHostInfo,
         addMessage,
         resetCall,
         toggleMic,
@@ -67,6 +78,7 @@ export const
         updateParticipant,
         removeParticipant,
         updateParticipants,
+        updateMeetSettings,
         addStream,
         removeStream,
         setIsSidebarOpen,
