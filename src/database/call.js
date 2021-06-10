@@ -36,6 +36,9 @@ const callSlice = createSlice({
         updateParticipant: (state, { payload }) => {
             state.participants = state.participants.filter(e => e.refId !== payload.refId)
             state.participants.push(payload)
+            const isDiffUser = payload.refId !== state.refId
+            if (isDiffUser && payload.isHandRaised)
+                playIncomingMessageSound()
         },
         toggleMic: state => {
             state.isMicOn = !state.isMicOn

@@ -9,10 +9,10 @@ export const getParticipantRef = (meetId, userId) => {
 }
 
 export const createNewMeeting = (meetId, meetHost) => {
-    getMeetRef().onDisconnect().update({
+    getMeetRef(meetId).onDisconnect().update({
         adminDisconnected: true
     })
-    return getMeetRef().set({
+    return getMeetRef(meetId).set({
         meetId,
         meetHost,
         isChatDisabled: false,
@@ -24,6 +24,6 @@ export const getMeetDetails = (meetId) => {
     return getMeetRef(meetId).get()
 }
 
-export const updateParticipantDetails = () => {
-
+export const updateParticipantDetails = (meetId, refId, data) => {
+    return getParticipantRef(meetId, refId).update(data)
 }

@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { connect } from "react-redux";
+import { updateParticipantDetails } from "../../../database/fires";
 
-const RaiseHandButton = () => {
-
-    const [isOn, setIsOn] = useState(false);
+const RaiseHandButton = ({ isOn, meetId, refId }) => {
 
     const toggleHand = (_) => {
-        setIsOn(prev => !prev)
+        updateParticipantDetails(meetId, refId, { isHandRaised: !isOn })
     }
 
     return (
@@ -20,4 +19,10 @@ const RaiseHandButton = () => {
     );
 }
 
-export default RaiseHandButton;
+const mapStateToProps = ({ call }) => ({
+    meetId: call.meetId,
+    refId: call.refId,
+    isOn: !!call.participants.find(e => e.refId === call.refId)?.isHandRaised
+})
+
+export default connect(mapStateToProps)(RaiseHandButton);

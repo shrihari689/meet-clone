@@ -1,11 +1,13 @@
 import { connect } from "react-redux";
 import { getOrderedPeoples } from "../../../utils/general";
 import SidebarHeader from "../Shared/SidebarHeader";
+import HandRaisedPeopleItem from "./HandRaisedPeopleItem";
 import PeopleItem from "./PeopleItem";
 
 function PeopleList({ onClose, refId, participants }) {
 
     const orderedPeoples = getOrderedPeoples(participants, refId);
+    const handRaisedPeoples = orderedPeoples.filter(e => e.isHandRaised);
 
     return (
         <>
@@ -25,15 +27,32 @@ function PeopleList({ onClose, refId, participants }) {
                         <span className="text-xs text-center">Host Control</span>
                     </div>
                 </div>
+                {
+                    (handRaisedPeoples.length > 0) &&
+                    <section className="w-full px-3 pl-4">
+                        <h2 className="font-semibold my-2 text-gray-600" style={{ fontSize: "0.7rem" }}>RAISED HAND</h2>
+                        <div className="flex flex-col">
+                            {handRaisedPeoples
+                                .map((people, i) =>
+                                    <HandRaisedPeopleItem
+                                        key={i}
+                                        details={people}
+                                    />
+                                )}
+                        </div>
+                    </section>
+                }
                 <section className="w-full px-3 pl-4 flex-1">
                     <h2 className="font-semibold my-2 text-gray-600" style={{ fontSize: "0.7rem" }}>IN CALL</h2>
                     <div className="flex flex-col">
                         {orderedPeoples
-                            .map((people, i) => <PeopleItem
-                                key={i}
-                                details={people}
-                                onMute={(_) => { }}
-                                onPin={(_) => { }} />
+                            .map((people, i) =>
+                                <PeopleItem
+                                    key={i}
+                                    details={people}
+                                    onMute={(_) => { }}
+                                    onPin={(_) => { }}
+                                />
                             )}
                     </div>
                 </section>

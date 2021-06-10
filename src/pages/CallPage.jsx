@@ -59,6 +59,8 @@ const CallPage = ({
                 ...currentUser,
                 isMicOn: false,
                 isCamOn: false,
+                isChatDisabled: false,
+                isHandRaised: false,
                 refId,
             });
             meetRef.child(refId).onDisconnect().remove();
