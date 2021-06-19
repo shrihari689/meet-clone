@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import { useRef } from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const MoreButton = () => {
 
@@ -37,7 +35,7 @@ const MoreButton = () => {
                     tabIndex={1}
                     onBlur={_ => setIsOn(false)}
                     ref={dialogRef}
-                    className="absolute  bottom-10 -left-5 bg-gray-100 rounded-md">
+                    className="absolute z-40 select-none bottom-10 -left-5 bg-gray-100 rounded-md">
                     <div
                         onClick={_ => handleSelection("record")}
                         className="text-gray-700 px-5 py-2 cursor-pointer my-1 hover:bg-gray-300 w-full">

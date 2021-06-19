@@ -65,6 +65,9 @@ const callSlice = createSlice({
             if (isChatDisabled !== undefined)
                 state.isChatDisabled = isChatDisabled
         },
+        toggleCaption: (state, { payload }) => {
+            state.isCaptionEnabled = payload
+        },
         resetCall: _ => Call
     }
 })
@@ -77,6 +80,7 @@ export const
         resetCall,
         toggleMic,
         toggleVideo,
+        toggleCaption,
         addParticipant,
         updateParticipant,
         removeParticipant,

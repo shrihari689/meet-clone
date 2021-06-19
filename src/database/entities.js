@@ -25,6 +25,7 @@ export const Call = {
     hostId: "",
     isHost: false,
     isChatDisabled: false,
+    isCaptionEnabled: false,
     chats: [],
     refId: "",
     meetId: "",
