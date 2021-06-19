@@ -5,6 +5,7 @@ import SidebarHeader from "../Shared/SidebarHeader";
 import ChatItem from "./ChatItem";
 import { getDateTimeString } from "../../../utils/time";
 import socket from "./../../../utils/socket"
+import { groupMessage } from "../../../utils/general";
 
 const ChatList = ({ onClose, messages, currentUser, isHost, isChatDisabled }) => {
 
@@ -25,7 +26,6 @@ const ChatList = ({ onClose, messages, currentUser, isHost, isChatDisabled }) =>
                 id: Math.ceil(Math.random() * 10000),
                 text: messageToBeSent,
                 sender: currentUser,
-                time: getDateTimeString().time
             }))
         setMessage("");
     }
@@ -44,7 +44,7 @@ const ChatList = ({ onClose, messages, currentUser, isHost, isChatDisabled }) =>
                 <div className="p-2 my-1 rounded-md text-center flex justify-center items-center bg-gray-100 text-gray-600 w-full text-xs">Messages can only be seen by people in the call and are deleted when the call ends.</div>
                 <div className="flex-1 flex flex-col w-full mt-1">
                     {
-                        messages.map((message, id) =>
+                        groupMessage(messages).map((message, id) =>
                             <ChatItem {...message} key={id} />
                         )
                     }
