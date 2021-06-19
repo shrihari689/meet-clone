@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import ToggleButton from "../../Shared/Toggle"
 import SidebarHeader from "../Shared/SidebarHeader";
 import ChatItem from "./ChatItem";
-import { getDateTimeString } from "../../../utils/time";
 import socket from "./../../../utils/socket"
 import { groupMessage } from "../../../utils/general";
 
