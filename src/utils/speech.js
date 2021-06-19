@@ -1,7 +1,12 @@
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition;
 
-const recognition = new SpeechRecognition();
-recognition.lang = 'en-US';
-recognition.continuous = true;
+try {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.continuous = true;
+} catch (e) {
+    recognition = null;
+}
 
 export default recognition;

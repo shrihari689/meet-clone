@@ -4,48 +4,52 @@ import { toggleCaption } from "../../../database/call";
 import { TABS } from "../../../database/entities";
 import recognition from "../../../utils/speech";
 
-const CaptionsButton = ({ isOn, setIsOn, isSidebarOpen }) => {
+const CaptionsButton = ({ isOn, isMicOn, setIsOn, isSidebarOpen }) => {
     const [caption, setCaption] = useState("");
 
     useEffect(() => {
-        if (isOn) {
-            try { recognition.start() } catch (_) { }
-            recognition.onresult = (e) => {
-                let predictedString = [];
-                for (var i = e.resultIndex; i < e.results.length; ++i) {
-                    if (e.results[i][0].confidence > 0.2) {
-                        predictedString.push(e.results[i][0].transcript);
+        if (recognition) {
+            if (isOn && isMicOn) {
+                try { recognition.start() } catch (_) { }
+                recognition.onresult = (e) => {
+                    let predictedString = [];
+                    for (var i = e.resultIndex; i < e.results.length; ++i) {
+                        if (e.results[i][0].confidence > 0.3) {
+                            predictedString.push(e.results[i][0].transcript);
+                        }
                     }
+                    setCaption(predictedString.join(" "));
                 }
-                setCaption(predictedString.join(" "));
-            }
-            recognition.nomatch = (_) => { }
-            recognition.onerror = (e) => {
-                if ((e.error === "no-speech") || (e.error === "audio-capture") || (e.error === "network") || (e.error === "bad-grammar")) {
-                    recognition.abort();
-                    try {
-                        recognition.start()
-                    } catch (_) {
+                recognition.nomatch = (_) => { }
+                recognition.onerror = (e) => {
+                    if ((e.error === "no-speech") || (e.error === "audio-capture") || (e.error === "network") || (e.error === "bad-grammar")) {
+                        recognition.abort();
+                        try {
+                            recognition.start()
+                        } catch (_) {
 
+                        }
                     }
                 }
+                recognition.onend = (_) => { setIsOn(false) }
+            } else {
+                recognition.stop()
             }
-            recognition.onend = (_) => { setIsOn(false) }
         } else {
-            recognition.stop()
+            setCaption("Your Computer doesn't support Live Captions!");
         }
 
         return () => {
             recognition.abort()
         }
 
-    }, [isOn]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [isOn, isMicOn]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const toggleCaptions = (_) => {
         setIsOn(!isOn)
     }
 
-    if (caption) setTimeout(() => { setCaption("") }, 3000);
+    if (caption) setTimeout(() => { setCaption("") }, 5000);
 
     return (
         <>
@@ -68,6 +72,7 @@ const CaptionsButton = ({ isOn, setIsOn, isSidebarOpen }) => {
 
 const mapStateToProps = ({ call }) => ({
     isOn: call.isCaptionEnabled,
+    isMicOn: call.isMicOn,
     isSidebarOpen: call.isSidebarOpen !== TABS.NO_SIDEBAR
 })
 
