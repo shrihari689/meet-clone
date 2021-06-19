@@ -1,23 +1,77 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { toggleCaption } from "../../../database/call";
+import { TABS } from "../../../database/entities";
+import recognition from "../../../utils/speech";
 
-const CaptionsButton = () => {
+const CaptionsButton = ({ isOn, setIsOn, isSidebarOpen }) => {
+    const [caption, setCaption] = useState("");
 
-    const [isOn, setIsOn] = useState(false);
+    useEffect(() => {
+        if (isOn) {
+            try { recognition.start() } catch (_) { }
+            recognition.onresult = (e) => {
+                let predictedString = [];
+                for (var i = e.resultIndex; i < e.results.length; ++i) {
+                    if (e.results[i][0].confidence > 0.2) {
+                        predictedString.push(e.results[i][0].transcript);
+                    }
+                }
+                setCaption(predictedString.join(" "));
+            }
+            recognition.nomatch = (_) => { }
+            recognition.onerror = (e) => {
+                if ((e.error === "no-speech") || (e.error === "audio-capture") || (e.error === "network") || (e.error === "bad-grammar")) {
+                    recognition.abort();
+                    try {
+                        recognition.start()
+                    } catch (_) {
+
+                    }
+                }
+            }
+            recognition.onend = (_) => { setIsOn(false) }
+        } else {
+            recognition.stop()
+        }
+
+        return () => {
+            recognition.abort()
+        }
+
+    }, [isOn]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const toggleCaptions = (_) => {
-        setIsOn(prev => !prev)
+        setIsOn(!isOn)
     }
 
+    if (caption) setTimeout(() => { setCaption("") }, 3000);
+
     return (
-        <div
-            title={"Captions " + (isOn ? "Off" : "On")}
-            onClick={toggleCaptions}
-            className={"h-8 w-8 rounded-full cursor-pointer flex items-center justify-center mx-1 " + (isOn ? " bg-yellow-600 hover:bg-yellow-500" : " bg-gray-700 hover:bg-gray-800")}>
-            <i className="google-material-icons" style={{ fontSize: '16px' }}>
-                closed_caption
-            </i>
-        </div>
+        <>
+            {
+                (isOn && caption) && <div className={"absolute select-none left-0 flex justify-center md:bottom-20 bottom-36" + (isSidebarOpen ? " md:w-4/6 w-full" : " w-full")}>
+                    <div className="bg-black px-3 py-2 rounded-md font-medium z-30 bg-opacity-60">{caption}</div>
+                </div>
+            }
+            <div
+                title={"Captions " + (isOn ? "Off" : "On")}
+                onClick={toggleCaptions}
+                className={"h-8 w-8 rounded-full cursor-pointer flex items-center justify-center mx-1 " + (isOn ? " bg-yellow-600 hover:bg-yellow-500" : " bg-gray-700 hover:bg-gray-800")}>
+                <i className="google-material-icons" style={{ fontSize: '16px' }}>
+                    closed_caption
+                </i>
+            </div>
+        </>
     );
 }
 
-export default CaptionsButton;
+const mapStateToProps = ({ call }) => ({
+    isOn: call.isCaptionEnabled,
+    isSidebarOpen: call.isSidebarOpen !== TABS.NO_SIDEBAR
+})
+
+const mapDispatchToProps = dispatch => ({
+    setIsOn: e => dispatch(toggleCaption(e))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(CaptionsButton);
