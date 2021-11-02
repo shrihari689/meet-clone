@@ -26,13 +26,13 @@ const HomePage = () => {
                         <span className="mx-1">•</span>
                         <Date />
                         <div className="h-10 w-10 ml-2 flex items-center justify-center hover:bg-gray-100 cursor-pointer rounded-full">
-                            <i className="google-material-icons text-gray-600">help_outline</i>
+                            <i className="google-material-icons text-gray-700">help_outline</i>
                         </div>
                         <div className="h-10 w-10 flex items-center justify-center hover:bg-gray-100 cursor-pointer rounded-full">
-                            <i className="google-material-icons text-gray-600">feedback</i>
+                            <i className="google-material-icons text-gray-700">feedback</i>
                         </div>
                         <div className="h-10 w-10 flex items-center justify-center hover:bg-gray-100 cursor-pointer rounded-full">
-                            <i className="google-material-icons text-gray-600">settings</i>
+                            <i className="google-material-icons text-gray-700">settings</i>
                         </div>
                     </div>
                     <a target="_blank" rel="noreferrer" href="https://apps.google.com/" className="h-10 w-10 ml-5 flex items-center justify-center hover:bg-gray-100 cursor-pointer rounded-full">
