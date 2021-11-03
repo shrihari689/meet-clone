@@ -7913,6 +7913,11 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
+linkify-react@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/linkify-react/-/linkify-react-3.0.3.tgz#97d420694cb173e46f75fb2b7de6f3887059ad4f"
+  integrity sha512-CdERZyocGB+2sHYKMKltAWy5TyelgocnMI7SU5vdT0ojtZd1u8sRuntXrxjA3tvgTirtLm2nD7gDdJFaVXvDAw==
+
 linkifyjs@^3.0.0-beta.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-3.0.3.tgz#51ea2160b4c60c2c87c27757a1e9eacd422c6076"

@@ -1,26 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
 import store from "./database/store";
-import { Provider } from "react-redux"
+import { Provider } from "react-redux";
+import { HMSRoomProvider } from "@100mslive/hms-video-react";
+import { isDevMode } from "./utils/general";
 
-store.subscribe(() => {
-  console.log("Logging: ", store.getState());
-})
+if (isDevMode())
+  store.subscribe(() => {
+    console.log("Logging: ", store.getState());
+  });
 
 ReactDOM.render(
-  // <React.StrictMode>
-  <Provider store={store}>
-    <App />
-  </Provider>
-  // </React.StrictMode>
-  ,
-  document.getElementById('root')
+  <React.StrictMode>
+    <HMSRoomProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </HMSRoomProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
