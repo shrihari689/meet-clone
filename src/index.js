@@ -6,19 +6,24 @@ import store from "./database/store";
 import { Provider } from "react-redux";
 import { HMSRoomProvider } from "@100mslive/hms-video-react";
 import { isDevMode } from "./utils/general";
+import { hmsStore } from "./utils/hms";
 
-if (isDevMode())
+if (isDevMode()) {
   store.subscribe(() => {
     console.log("Logging: ", store.getState());
   });
+  hmsStore.subscribe(() => {
+    console.log("HMS Logging: ", hmsStore.getState());
+  });
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <HMSRoomProvider>
-      <Provider store={store}>
+    <Provider store={store}>
+      <HMSRoomProvider store={hmsStore}>
         <App />
-      </Provider>
-    </HMSRoomProvider>
+      </HMSRoomProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
