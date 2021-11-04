@@ -45,7 +45,7 @@ function App({ isLoggedIn, setCurrentUser }) {
     <Router>
       <Switch>
         <Route path="/home" component={HomePage} />
-        <Route path="/:id" component={CallPage} />
+        <Route path="/:id([a-z]{3}-[a-z]{4}-[a-z]{3})" component={CallPage} />
         <Redirect from="/" to="/home" />
       </Switch>
     </Router>
