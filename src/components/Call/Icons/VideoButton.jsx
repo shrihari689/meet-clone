@@ -1,9 +1,16 @@
+import React, { useState, useEffect } from "react";
 import { hmsActions } from "../../../utils/hms";
 
 const VideoButton = ({ localPeerVideo }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const isOn = localPeerVideo?.enabled;
 
+  useEffect(() => {
+    if (isOn) setIsLoading(false);
+  }, [isOn]);
+
   const toggleCam = (_) => {
+    if (!isOn) setIsLoading(true);
     hmsActions.setLocalVideoEnabled(!isOn);
   };
 
@@ -18,8 +25,11 @@ const VideoButton = ({ localPeerVideo }) => {
           : " bg-gray-700 hover:bg-gray-800")
       }
     >
-      <i className="google-material-icons" style={{ fontSize: "16px" }}>
-        {!isOn ? "videocam_off" : "videocam"}
+      <i
+        className={"google-material-icons " + (isLoading ? "animate-spin" : "")}
+        style={{ fontSize: "16px" }}
+      >
+        {!isOn ? (isLoading ? "loop" : "videocam_off") : "videocam"}
       </i>
     </div>
   );

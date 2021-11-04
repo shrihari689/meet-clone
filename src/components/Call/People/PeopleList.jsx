@@ -57,7 +57,7 @@ function PeopleList({ onClose, participants }) {
             {orderedPeoples.map((people, i) => (
               <PeopleItem
                 key={i}
-                details={people}
+                people={people}
                 onMute={(_) => {}}
                 onPin={(_) => {}}
               />

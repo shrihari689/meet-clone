@@ -45,7 +45,7 @@ const CallPeopleItem = ({ people, audio, video }) => {
         />
       </div>
       <div className="w-full flex justify-start text-gray-300 font-medium text-sm py-1">
-        {name}
+        {people.isLocal ? "You" : name}
       </div>
     </div>
   );

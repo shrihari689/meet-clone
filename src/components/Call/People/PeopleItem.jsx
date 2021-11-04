@@ -1,5 +1,5 @@
-const PeopleItem = ({ details, onMute, onPin }) => {
-  const { user } = JSON.parse(details.customerDescription);
+const PeopleItem = ({ people, onMute, onPin }) => {
+  const { user } = JSON.parse(people.customerDescription);
 
   const { name, image } = user;
 
@@ -11,7 +11,9 @@ const PeopleItem = ({ details, onMute, onPin }) => {
           src={image}
           alt={name}
         />
-        <span className="text-xs font-normal ml-2">{name}</span>
+        <span className="text-xs font-normal ml-2">
+          {name} {people.isLocal ? "(You)" : ""}
+        </span>
       </div>
       <div className="flex items-center space-x-2 px-1 text-gray-600">
         <div
