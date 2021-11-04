@@ -15,7 +15,7 @@ const CallPeopleItem = ({ people, audio, video }) => {
   useEffect(() => {
     if (isCamOn) {
       hmsActions.attachVideo(people.videoTrack, camVideoRef.current);
-    } else {
+    } else if (people.videoTrack) {
       hmsActions.detachVideo(people.videoTrack, camVideoRef.current);
     }
   }, [isCamOn, people]);

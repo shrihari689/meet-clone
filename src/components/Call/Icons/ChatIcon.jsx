@@ -32,7 +32,7 @@ const ChatIcon = ({ isSidebarOpen, hasUnseenMessages, onClick }) => {
 };
 
 const mapStateToProps = (state) => ({
-  hasUnseenMessages: state.messages,
+  hasUnseenMessages: state.call.hasUnseenMessages,
 });
 
 const mapDispatchToProps = (dispatch) => ({});

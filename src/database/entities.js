@@ -19,5 +19,6 @@ export const Call = {
   peers: {},
   tracks: {},
   messages: {},
+  hasUnseenMessages: false,
   isSidebarOpen: TABS.NO_SIDEBAR,
 };

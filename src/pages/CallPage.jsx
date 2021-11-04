@@ -15,19 +15,30 @@ import ShareScreenButton from "../components/Call/Icons/ShareScreenButton";
 import MoreButton from "../components/Call/Icons/MoreButton";
 import EndCallButton from "../components/Call/Icons/EndCallButton";
 import CallPeopleItem from "../components/Call/CallPeopleItem";
-import { playJoiningSound, playLeavingSound } from "../utils/sounds";
+import {
+  playIncomingMessageSound,
+  playJoiningSound,
+  playLeavingSound,
+} from "../utils/sounds";
 import { TABS } from "../database/entities";
 import ChatIcon from "../components/Call/Icons/ChatIcon";
 import HostControlsIcon from "../components/Call/Icons/HostControlsIcon";
 import { setIsSidebarOpen } from "../database/call";
 import { Redirect } from "react-router";
+import { hmsNotifications } from "../utils/hms";
+import { HMSNotificationTypes } from "@100mslive/hms-video-store";
 
 const CallPage = ({ match, isSidebarOpen, setIsSidebarOpen, callInfo }) => {
   const meetId = match.params.id;
 
   useEffect(() => {
     playJoiningSound();
+    const unsubscribe = hmsNotifications.onNotification((notification) => {
+      if (notification.type === HMSNotificationTypes.NEW_MESSAGE)
+        playIncomingMessageSound();
+    });
     return () => {
+      unsubscribe();
       playLeavingSound();
     };
   }, []);
