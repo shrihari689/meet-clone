@@ -1,34 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { createNewMeeting } from "../../database/fires";
+import { Redirect } from "react-router-dom";
+import { joinNewMeeting } from "../../utils/hms";
 
-import { generateNewMeetId } from "../../utils/validator";
-import { hmsStore, joinNewMeeting } from "../../utils/hms";
-
-const NewMeetingButton = ({ currentUser }) => {
+const NewMeetingButton = ({ currentUser, peers, room }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const pageRouter = useHistory();
 
-  useEffect(() => {
-    const unsubscribe = hmsStore.subscribe(() => {
-      const { room, peers } = hmsStore.getState();
-      if (!room.isConnected) return;
-      const peer = JSON.parse(peers[room.localPeer].customerDescription);
-      const meetId = peer.meeting.id;
-      pageRouter.replace(`/${meetId}`);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  if (room.isConnected) {
+    const peer = JSON.parse(peers[room.localPeer].customerDescription);
+    const meetId = peer.meeting.id;
+    return <Redirect to={`/${meetId}`} />;
+  }
 
   const handleNewMeeting = (_) => {
     setIsLoading(true);
-    const newId = generateNewMeetId();
-    createNewMeeting(newId, currentUser.id);
-    joinNewMeeting(newId, currentUser);
+    joinNewMeeting(currentUser);
   };
 
   return (
@@ -54,6 +40,8 @@ const NewMeetingButton = ({ currentUser }) => {
 
 const mapStateToProps = (state) => ({
   currentUser: state.auth,
+  peers: state.call.peers,
+  room: state.call.room,
 });
 
 export default connect(mapStateToProps)(NewMeetingButton);

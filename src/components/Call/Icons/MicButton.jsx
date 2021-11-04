@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { connect } from "react-redux";
 import { hmsActions } from "../../../utils/hms";
 
 const MicButton = ({ localPeerAudio }) => {

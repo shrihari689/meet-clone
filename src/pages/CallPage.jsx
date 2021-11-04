@@ -11,7 +11,6 @@ import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
 import MicButton from "../components/Call/Icons/MicButton";
 import VideoButton from "../components/Call/Icons/VideoButton";
-import RaiseHandButton from "../components/Call/Icons/RaiseHandButton";
 import ShareScreenButton from "../components/Call/Icons/ShareScreenButton";
 import MoreButton from "../components/Call/Icons/MoreButton";
 import EndCallButton from "../components/Call/Icons/EndCallButton";
@@ -21,6 +20,7 @@ import { TABS } from "../database/entities";
 import ChatIcon from "../components/Call/Icons/ChatIcon";
 import HostControlsIcon from "../components/Call/Icons/HostControlsIcon";
 import { setIsSidebarOpen } from "../database/call";
+import { Redirect } from "react-router";
 
 const CallPage = ({ match, isSidebarOpen, setIsSidebarOpen, callInfo }) => {
   const meetId = match.params.id;
@@ -33,10 +33,9 @@ const CallPage = ({ match, isSidebarOpen, setIsSidebarOpen, callInfo }) => {
   }, []);
 
   const { room, peers, tracks } = callInfo;
+  const people = Object.keys(peers).map((e) => peers[e]);
 
   console.log("Call Page Rendering");
-
-  const orderedPeoples = Object.keys(peers).map((e) => peers[e]);
 
   const handleSidebarChange = (option) => {
     setIsSidebarOpen(option);
@@ -46,6 +45,8 @@ const CallPage = ({ match, isSidebarOpen, setIsSidebarOpen, callInfo }) => {
     handleSidebarChange(TABS.NO_SIDEBAR);
   };
 
+  if (!room.isConnected) return <Redirect to="/home" />;
+
   return (
     <main className="h-screen w-full flex flex-col justify-between bg-gray-900 overflow-hidden">
       <Helmet>
@@ -53,7 +54,7 @@ const CallPage = ({ match, isSidebarOpen, setIsSidebarOpen, callInfo }) => {
       </Helmet>
       <div className="w-full h-screen flex p-3 pb-28 md:pb-14">
         <div className="flex-1 w-full px-2 flex flex-wrap">
-          {orderedPeoples.map((peer) => (
+          {people.map((peer) => (
             <CallPeopleItem
               key={peer.id}
               audio={tracks[peer.audioTrack]}
@@ -126,7 +127,7 @@ const CallPage = ({ match, isSidebarOpen, setIsSidebarOpen, callInfo }) => {
               style={{ fontSize: "0.6rem" }}
               className="absolute -top-1 right-0 p-1 h-4 bg-red-700 text-xs text-white flex items-center justify-center rounded-full"
             >
-              {orderedPeoples.length}
+              {people.length}
             </div>
           </div>
           <ChatIcon

@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import { getOrderedPeoples } from "../../../utils/general";
 import SidebarHeader from "../Shared/SidebarHeader";
 import HandRaisedPeopleItem from "./HandRaisedPeopleItem";
 import PeopleItem from "./PeopleItem";

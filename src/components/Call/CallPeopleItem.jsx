@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRef } from "react";
-import { hmsActions, hmsStore } from "../../utils/hms";
+import { hmsActions } from "../../utils/hms";
 import MicAmplifyIcon from "./Icons/MicAmplifyIcon";
 
 const CallPeopleItem = ({ people, audio, video }) => {
@@ -18,7 +18,7 @@ const CallPeopleItem = ({ people, audio, video }) => {
     } else {
       hmsActions.detachVideo(people.videoTrack, camVideoRef.current);
     }
-  }, [isCamOn]);
+  }, [isCamOn, people]);
 
   return (
     <div

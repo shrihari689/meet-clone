@@ -1,9 +1,6 @@
 import React from "react";
-import { useEffect } from "react";
 import { connect } from "react-redux";
 import { TABS } from "../../../database/entities";
-import { getMeetRef } from "../../../database/fires";
-import { isValidMeetId } from "../../../utils/validator";
 
 const ChatIcon = ({ isSidebarOpen, hasUnseenMessages, onClick }) => {
   return (

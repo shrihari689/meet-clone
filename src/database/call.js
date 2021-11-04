@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { playIncomingMessageSound } from "../utils/sounds";
+// import { playIncomingMessageSound } from "../utils/sounds";
 import { Call, TABS } from "./entities";
 
 const callSlice = createSlice({
@@ -13,7 +13,11 @@ const callSlice = createSlice({
       state.messages = payload.messages;
     },
     setIsSidebarOpen: (state, { payload }) => {
-      state.isSidebarOpen = payload;
+      if (state.isSidebarOpen === payload) {
+        state.isSidebarOpen = TABS.NO_SIDEBAR;
+      } else {
+        state.isSidebarOpen = payload;
+      }
     },
     resetCall: (_) => Call,
   },
