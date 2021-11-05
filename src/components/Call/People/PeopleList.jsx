@@ -3,9 +3,9 @@ import SidebarHeader from "../Shared/SidebarHeader";
 import HandRaisedPeopleItem from "./HandRaisedPeopleItem";
 import PeopleItem from "./PeopleItem";
 
-function PeopleList({ onClose, participants }) {
-  const orderedPeoples = participants;
-  const handRaisedPeoples = [];
+function PeopleList({ onClose, participants, handRaised }) {
+  const peoples = participants;
+  const handRaisedPeoples = peoples.filter((people) => handRaised[people.id]);
 
   return (
     <>
@@ -54,9 +54,9 @@ function PeopleList({ onClose, participants }) {
             IN CALL
           </h2>
           <div className="flex flex-col">
-            {orderedPeoples.map((people, i) => (
+            {peoples.map((people) => (
               <PeopleItem
-                key={i}
+                key={people.id}
                 people={people}
                 onMute={(_) => {}}
                 onPin={(_) => {}}
@@ -71,6 +71,7 @@ function PeopleList({ onClose, participants }) {
 
 const mapStateToProps = (state) => ({
   participants: Object.keys(state.call.peers).map((e) => state.call.peers[e]),
+  handRaised: state.call.handRaised,
 });
 
 export default connect(mapStateToProps)(PeopleList);

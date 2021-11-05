@@ -13,12 +13,12 @@ const CallPeopleItem = ({ people, audio, video }) => {
   const isCamOn = Boolean(video?.enabled);
 
   useEffect(() => {
-    if (isCamOn) {
-      hmsActions.attachVideo(people.videoTrack, camVideoRef.current);
-    } else if (people.videoTrack) {
-      hmsActions.detachVideo(people.videoTrack, camVideoRef.current);
+    if (isCamOn && video?.id) {
+      hmsActions.attachVideo(video.id, camVideoRef.current);
+    } else if (video?.id) {
+      hmsActions.detachVideo(video.id, camVideoRef.current);
     }
-  }, [isCamOn, people]);
+  }, [isCamOn, video]);
 
   return (
     <div

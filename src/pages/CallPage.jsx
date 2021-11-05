@@ -23,25 +23,38 @@ import {
 import { TABS } from "../database/entities";
 import ChatIcon from "../components/Call/Icons/ChatIcon";
 import HostControlsIcon from "../components/Call/Icons/HostControlsIcon";
-import { setIsSidebarOpen } from "../database/call";
+import { lowerHand, raiseHand, setIsSidebarOpen } from "../database/call";
 import { Redirect } from "react-router";
 import { hmsNotifications } from "../utils/hms";
 import { HMSNotificationTypes } from "@100mslive/hms-video-store";
+import RaiseHandButton from "../components/Call/Icons/RaiseHandButton";
 
-const CallPage = ({ match, isSidebarOpen, setIsSidebarOpen, callInfo }) => {
+const CallPage = ({
+  match,
+  isSidebarOpen,
+  setIsSidebarOpen,
+  callInfo,
+  raiseHandById,
+  lowerHandById,
+}) => {
   const meetId = match.params.id;
 
   useEffect(() => {
     playJoiningSound();
     const unsubscribe = hmsNotifications.onNotification((notification) => {
-      if (notification.type === HMSNotificationTypes.NEW_MESSAGE)
+      if (notification.type === HMSNotificationTypes.NEW_MESSAGE) {
+        if (notification.data?.type === "HAND_RAISED")
+          raiseHandById(notification.data.message);
+        else if (notification.data?.type === "HAND_LOWERED")
+          lowerHandById(notification.data.message);
         playIncomingMessageSound();
+      }
     });
     return () => {
       unsubscribe();
       playLeavingSound();
     };
-  }, []);
+  }, [raiseHandById, lowerHandById]);
 
   const { room, peers, tracks } = callInfo;
   const people = Object.keys(peers).map((e) => peers[e]);
@@ -107,7 +120,7 @@ const CallPage = ({ match, isSidebarOpen, setIsSidebarOpen, callInfo }) => {
             localPeerVideo={tracks[peers[room.localPeer].videoTrack]}
           />
           {/* <CaptionsButton /> */}
-          {/* <RaiseHandButton /> */}
+          <RaiseHandButton />
           <ShareScreenButton />
           <MoreButton />
           <EndCallButton />
@@ -169,6 +182,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setIsSidebarOpen: (e) => dispatch(setIsSidebarOpen(e)),
+  raiseHandById: (e) => dispatch(raiseHand(e)),
+  lowerHandById: (e) => dispatch(lowerHand(e)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CallPage);
