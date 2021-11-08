@@ -20,6 +20,7 @@ export const Call = {
   tracks: {},
   messages: {},
   handRaised: {},
+  pinnedParticipant: null,
   hasUnseenMessages: false,
   isSidebarOpen: TABS.NO_SIDEBAR,
 };

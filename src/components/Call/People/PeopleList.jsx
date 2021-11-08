@@ -2,8 +2,16 @@ import { connect } from "react-redux";
 import SidebarHeader from "../Shared/SidebarHeader";
 import HandRaisedPeopleItem from "./HandRaisedPeopleItem";
 import PeopleItem from "./PeopleItem";
+import { pinParticipant } from "./../../../database/call";
 
-function PeopleList({ onClose, participants, handRaised }) {
+function PeopleList({
+  onClose,
+  participants,
+  handRaised,
+  tracks,
+  pinnedParticipant,
+  pinParticipantById,
+}) {
   const peoples = participants;
   const handRaisedPeoples = peoples.filter((people) => handRaised[people.id]);
 
@@ -58,8 +66,10 @@ function PeopleList({ onClose, participants, handRaised }) {
               <PeopleItem
                 key={people.id}
                 people={people}
+                isMute={tracks[people.audioTrack]?.enabled}
+                isPinned={pinnedParticipant === people.id}
                 onMute={(_) => {}}
-                onPin={(_) => {}}
+                onPin={(_) => pinParticipantById(people.id)}
               />
             ))}
           </div>
@@ -72,6 +82,12 @@ function PeopleList({ onClose, participants, handRaised }) {
 const mapStateToProps = (state) => ({
   participants: Object.keys(state.call.peers).map((e) => state.call.peers[e]),
   handRaised: state.call.handRaised,
+  tracks: state.call.tracks,
+  pinnedParticipant: state.call.pinnedParticipant,
 });
 
-export default connect(mapStateToProps)(PeopleList);
+const mapDispatchToProps = (dispatch) => ({
+  pinParticipantById: (e) => dispatch(pinParticipant(e)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PeopleList);

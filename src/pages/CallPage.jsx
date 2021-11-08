@@ -56,10 +56,8 @@ const CallPage = ({
     };
   }, [raiseHandById, lowerHandById]);
 
-  const { room, peers, tracks } = callInfo;
-  const people = Object.keys(peers).map((e) => peers[e]);
-
-  console.log("Call Page Rendering");
+  const { room, peers, tracks, pinnedParticipant } = callInfo;
+  const peoples = Object.keys(peers).map((e) => peers[e]);
 
   const handleSidebarChange = (option) => {
     setIsSidebarOpen(option);
@@ -78,14 +76,23 @@ const CallPage = ({
       </Helmet>
       <div className="w-full h-screen flex p-3 pb-28 md:pb-14">
         <div className="flex-1 w-full px-2 flex flex-wrap">
-          {people.map((peer) => (
+          {pinnedParticipant && peers[pinnedParticipant] ? (
             <CallPeopleItem
-              key={peer.id}
-              audio={tracks[peer.audioTrack]}
-              video={tracks[peer.videoTrack]}
-              people={peer}
+              key={peers[pinnedParticipant].id}
+              audio={tracks[peers[pinnedParticipant].audioTrack]}
+              video={tracks[peers[pinnedParticipant].videoTrack]}
+              people={peers[pinnedParticipant]}
             />
-          ))}
+          ) : (
+            peoples.map((peer) => (
+              <CallPeopleItem
+                key={peer.id}
+                audio={tracks[peer.audioTrack]}
+                video={tracks[peer.videoTrack]}
+                people={peer}
+              />
+            ))
+          )}
         </div>
         <Sidebar isOpen={isSidebarOpen !== TABS.NO_SIDEBAR}>
           {isSidebarOpen === TABS.INFO && (
@@ -151,7 +158,7 @@ const CallPage = ({
               style={{ fontSize: "0.6rem" }}
               className="absolute -top-1 right-0 p-1 h-4 bg-red-700 text-xs text-white flex items-center justify-center rounded-full"
             >
-              {people.length}
+              {peoples.length}
             </div>
           </div>
           <ChatIcon

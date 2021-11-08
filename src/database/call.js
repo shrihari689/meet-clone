@@ -19,6 +19,8 @@ const callSlice = createSlice({
           time: dayjs(messages[e].time).format("hh:mm A"),
         }))
         .filter((e) => e.type === "chat");
+      if (!(state.pinnedParticipant in state.peers))
+        state.pinnedParticipant = null;
       state.hasUnseenMessages = countUnreadMessages(state.messages) !== 0;
     },
     setIsSidebarOpen: (state, { payload }) => {
@@ -36,8 +38,15 @@ const callSlice = createSlice({
       delete newHandRaised[payload];
       state.handRaised = newHandRaised;
     },
-    lowerAllHands: (state, { payload }) => {
+    lowerAllHands: (state, _) => {
       state.handRaised = {};
+    },
+    pinParticipant: (state, { payload }) => {
+      if (state.pinnedParticipant === payload) {
+        state.pinnedParticipant = null;
+      } else {
+        state.pinnedParticipant = payload;
+      }
     },
     resetCall: (_) => Call,
   },
@@ -49,6 +58,7 @@ export const {
   lowerHand,
   raiseHand,
   setIsSidebarOpen,
+  pinParticipant,
 } = callSlice.actions;
 
 export default callSlice;

@@ -39,6 +39,7 @@ const CallPeopleItem = ({ people, audio, video }) => {
           ref={camVideoRef}
         />
         <img
+          referrerPolicy="no-referrer"
           className={isCamOn ? "hidden" : "h-18 w-18 rounded-full"}
           src={image}
           alt={name}
