@@ -49,7 +49,7 @@ function PeopleList({
             </h2>
             <div className="flex flex-col">
               {handRaisedPeoples.map((people, i) => (
-                <HandRaisedPeopleItem key={i} details={people} />
+                <HandRaisedPeopleItem key={i} people={people} />
               ))}
             </div>
           </section>
