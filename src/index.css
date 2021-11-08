@@ -64,3 +64,25 @@ body {
     @apply h-3;
   }
 }
+.preview_icon {
+  @apply h-10;
+  @apply w-10;
+  @apply ring-opacity-50;
+  @apply flex;
+  @apply items-center;
+  @apply justify-center;
+  @apply ring-2;
+  @apply rounded-full;
+}
+
+.preview_icon_on {
+  @apply ring-gray-50;
+  @apply hover:bg-gray-200;
+  @apply hover:text-gray-800;
+}
+
+.preview_icon_off {
+  @apply ring-red-600;
+  @apply bg-red-700;
+  @apply hover:bg-red-600;
+}

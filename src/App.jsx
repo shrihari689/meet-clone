@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import { auth } from "./utils/firebase";
 import { setUser } from "./database/auth";
 import { connect } from "react-redux";
+import PreviewPage from "./pages/PreviewPage";
 
 function App({ isLoggedIn, setCurrentUser }) {
   useEffect(() => {
@@ -45,6 +46,7 @@ function App({ isLoggedIn, setCurrentUser }) {
     <Router>
       <Switch>
         <Route path="/home" component={HomePage} />
+        <Route path="/preview" component={PreviewPage} />
         <Route path="/:id([a-z]{3}-[a-z]{4}-[a-z]{3})" component={CallPage} />
         <Redirect from="/" to="/home" />
       </Switch>
