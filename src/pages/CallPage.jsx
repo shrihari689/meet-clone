@@ -67,7 +67,7 @@ const CallPage = ({
     handleSidebarChange(TABS.NO_SIDEBAR);
   };
 
-  if (!room.isConnected) return <Redirect to="/home" />;
+  if (!room.isConnected) return <Redirect to={"/join/" + meetId} />;
 
   return (
     <main className="h-screen w-full flex flex-col justify-between bg-gray-900 overflow-hidden">
