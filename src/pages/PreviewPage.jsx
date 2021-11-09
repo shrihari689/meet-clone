@@ -40,7 +40,6 @@ const PreviewPage = ({ match, location, user, room }) => {
     joinRoom(user, roomToken, meetId);
   };
 
-  console.log(room);
   if (room.isConnected) return <Redirect to={`/${meetId}`} />;
   if (isRoomNotFound) return <Redirect to="/home" />;
 
