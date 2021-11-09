@@ -1,1 +1,0 @@
-export const HOST = "https://meet-clone-shrihari689.web.app"
