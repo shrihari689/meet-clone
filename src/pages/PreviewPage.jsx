@@ -35,7 +35,7 @@ const PreviewPage = ({ match, location, user, room }) => {
     hmsActions.leave();
     setIsRoomNotFound(true);
   };
-  n;
+
   const handleJoinMeeting = (_) => {
     joinRoom(user, roomToken, meetId);
   };
