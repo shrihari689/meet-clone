@@ -17,7 +17,7 @@ import PreviewPage from "./pages/PreviewPage";
 function App({ isLoggedIn, setCurrentUser }) {
   useEffect(() => {
     auth.onIdTokenChanged(async (user) => {
-      const token = await user.getIdToken();
+      const token = await user?.getIdToken();
       localStorage.setItem("firebase_access_token", token);
     });
     auth.onAuthStateChanged((user) => {

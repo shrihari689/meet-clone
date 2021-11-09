@@ -12,11 +12,11 @@ if (isDevMode()) {
   store.subscribe(() => {
     console.log("Logging: ", store.getState());
   });
-  hmsStore.subscribe(() => {
-    const { room, tracks, peers, messages } = hmsStore.getState();
-    store.dispatch(setCallInfo({ room, tracks, peers, messages }));
-  });
 }
+hmsStore.subscribe(() => {
+  const { room, tracks, peers, messages } = hmsStore.getState();
+  store.dispatch(setCallInfo({ room, tracks, peers, messages }));
+});
 
 ReactDOM.render(
   <React.StrictMode>

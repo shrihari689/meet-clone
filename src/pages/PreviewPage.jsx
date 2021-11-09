@@ -18,7 +18,6 @@ const PreviewPage = ({ match, location, user, room }) => {
   const meetId = match.params.id;
 
   useEffect(() => {
-    console.log("Connecting..");
     if (roomToken) {
       previewRoom(user, roomToken, meetId);
     } else {
@@ -32,14 +31,16 @@ const PreviewPage = ({ match, location, user, room }) => {
     }
   }, [meetId, roomToken, user]);
 
-  const handleEndPreview = () => {
+  const handleEndPreview = (_) => {
     hmsActions.leave();
+    setIsRoomNotFound(true);
   };
-
-  const handleJoinMeeting = () => {
+  n;
+  const handleJoinMeeting = (_) => {
     joinRoom(user, roomToken, meetId);
   };
 
+  console.log(room);
   if (room.isConnected) return <Redirect to={`/${meetId}`} />;
   if (isRoomNotFound) return <Redirect to="/home" />;
 
