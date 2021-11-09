@@ -8,7 +8,8 @@ const callSlice = createSlice({
   initialState: Call,
   reducers: {
     setCallInfo: (state, { payload }) => {
-      if (!payload.room.isConnected) return Call;
+      if (!payload.room.isConnected && payload.room.roomState !== "Preview")
+        return Call;
       state.room = payload.room;
       state.peers = payload.peers;
       state.tracks = payload.tracks;

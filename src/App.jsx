@@ -16,6 +16,10 @@ import PreviewPage from "./pages/PreviewPage";
 
 function App({ isLoggedIn, setCurrentUser }) {
   useEffect(() => {
+    auth.onIdTokenChanged(async (user) => {
+      const token = await user.getIdToken();
+      localStorage.setItem("firebase_access_token", token);
+    });
     auth.onAuthStateChanged((user) => {
       setCurrentUser({
         id: user?.uid,
@@ -46,7 +50,10 @@ function App({ isLoggedIn, setCurrentUser }) {
     <Router>
       <Switch>
         <Route path="/home" component={HomePage} />
-        <Route path="/preview" component={PreviewPage} />
+        <Route
+          path="/join/:id([a-z]{3}-[a-z]{4}-[a-z]{3})"
+          component={PreviewPage}
+        />
         <Route path="/:id([a-z]{3}-[a-z]{4}-[a-z]{3})" component={CallPage} />
         <Redirect from="/" to="/home" />
       </Switch>

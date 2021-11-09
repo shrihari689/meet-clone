@@ -1,35 +1,67 @@
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import CameraTest from "../components/Call/Preview/CameraTest";
 import NavBar from "../components/Shared/NavBar";
+import { getMeetDetails } from "../database/fires";
+import {
+  hmsActions,
+  joinExistingRoom,
+  joinRoom,
+  previewRoom,
+} from "../utils/hms";
 
-const PreviewPage = () => {
+const PreviewPage = ({ match, location, user, room }) => {
+  const [roomToken, setRoomToken] = useState(() => location?.state?.token);
+  const [isRoomNotFound, setIsRoomNotFound] = useState(false);
+  const meetId = match.params.id;
+
+  useEffect(() => {
+    console.log("Connecting..");
+    if (roomToken) {
+      previewRoom(user, roomToken, meetId);
+    } else {
+      getMeetDetails(meetId).then((res) => {
+        if (res.exists()) {
+          joinExistingRoom(meetId).then((room) => setRoomToken(room.token));
+        } else {
+          setIsRoomNotFound(true);
+        }
+      });
+    }
+  }, [meetId, roomToken, user]);
+
+  const handleEndPreview = () => {
+    hmsActions.leave();
+  };
+
+  const handleJoinMeeting = () => {
+    joinRoom(user, roomToken, meetId);
+  };
+
+  if (room.isConnected) return <Redirect to={`/${meetId}`} />;
+  if (isRoomNotFound) return <Redirect to="/home" />;
+
   return (
     <>
       <Helmet>
-        <title>Preview - Google Meet Clone | @shrihari689</title>
+        <title>{meetId} - Google Meet Clone | @shrihari689</title>
       </Helmet>
       <NavBar />
       <main className="mt-10 md:mt-14 flex items-center flex-col justify-center">
-        <div className="bg-gray-900 w-4/5 md:w-2/5 h-80 text-white relative rounded-md overflow-hidden">
-          <div className="flex flex-col items-center justify-center w-full h-full">
-            <i className="material-icons text-gray-300 text-4xl">
-              videocam_off
-            </i>
-            <p className="mt-5">You camera is off</p>
-          </div>
-          <div className="absolute bottom-0 pb-5 w-full flex justify-center items-center space-x-5">
-            <button className="preview_icon preview_icon_off">
-              <i className="material-icons">mic_off</i>
-            </button>
-            <button className="preview_icon preview_icon_off">
-              <i className="material-icons">videocam_off</i>
-            </button>
-          </div>
-        </div>
+        <CameraTest />
         <div className="mt-5 w-full flex md:flex-row flex-col items-center justify-center">
-          <button className="flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-800 cursor-pointer select-none my-4 mx-2 sm:w-40 w-1/2 py-3 rounded-full">
+          <button
+            onClick={handleJoinMeeting}
+            className="flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-800 cursor-pointer select-none my-4 mx-2 sm:w-40 w-1/2 py-3 rounded-full  transform hover:scale-105 transition-all duration-200 ease-in-out active:scale-90"
+          >
             Join
           </button>
-          <button className="flex items-center justify-center text-white bg-red-600 hover:bg-red-800 cursor-pointer select-none my-4 mx-2 sm:w-40 w-1/2 py-3 rounded-full">
+          <button
+            onClick={handleEndPreview}
+            className="flex items-center justify-center text-white bg-red-600 hover:bg-red-800 cursor-pointer select-none my-4 mx-2 sm:w-40 w-1/2 py-3 rounded-full  transform hover:scale-105 transition-all duration-200 ease-in-out active:scale-90"
+          >
             Cancel
           </button>
         </div>
@@ -38,4 +70,10 @@ const PreviewPage = () => {
   );
 };
 
-export default PreviewPage;
+const mapStateToProps = ({ auth, call }) => ({
+  user: auth,
+  room: call.room,
+  videoTrack: call.tracks[call.peers[call.room.localPeer]?.videoTrack],
+});
+
+export default connect(mapStateToProps)(PreviewPage);

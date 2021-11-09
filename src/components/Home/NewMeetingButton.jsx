@@ -1,32 +1,34 @@
 import { useState } from "react";
-import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { joinNewMeeting } from "../../utils/hms";
+import { createNewMeeting } from "../../utils/hms";
 
-const NewMeetingButton = ({ currentUser, peers, room }) => {
+const NewMeetingButton = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [room, setRoom] = useState({ meetId: "", token: "" });
 
-  if (room.isConnected) {
-    const peer = JSON.parse(peers[room.localPeer].customerDescription);
-    const meetId = peer.meeting.id;
-    return <Redirect to={`/${meetId}`} />;
+  if (room.meetId) {
+    return (
+      <Redirect
+        to={{
+          pathname: `/join/${room.meetId}`,
+          state: room,
+        }}
+      />
+    );
   }
 
   const handleNewMeeting = (_) => {
     setIsLoading(true);
-    joinNewMeeting(currentUser);
+    createNewMeeting()
+      .then((room) => setRoom(room))
+      .catch((err) => console.log(err));
   };
 
   return (
     <button
       disabled={isLoading}
       onClick={handleNewMeeting}
-      className={
-        "flex items-center text-white cursor-pointer select-none mt-2 ml-2 p-2 rounded-sm " +
-        (isLoading
-          ? "cursor-not-allowed bg-indigo-400"
-          : "bg-indigo-600 hover:bg-indigo-800")
-      }
+      className="flex items-center text-white cursor-pointer select-none mt-2 ml-2 p-2 rounded-sm bg-indigo-600 hover:bg-indigo-800 disabled:cursor-not-allowed disabled:bg-indigo-400"
     >
       {isLoading ? (
         <i className="material-icons animate-spin">sync</i>
@@ -38,10 +40,4 @@ const NewMeetingButton = ({ currentUser, peers, room }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  currentUser: state.auth,
-  peers: state.call.peers,
-  room: state.call.room,
-});
-
-export default connect(mapStateToProps)(NewMeetingButton);
+export default NewMeetingButton;
