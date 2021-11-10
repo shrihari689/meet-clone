@@ -4,9 +4,9 @@ This repository contains the frontend for **[Google Meet Clone]**.
 
 ## 🌳 Branch Info
 
-> `master` - Legacy Code implemented using Websockets
+> `master` - Implemented using 100ms 🆕
 
-> `add-100ms` - Implemented using 100ms 🆕
+> `restore-legacy` - Legacy Code implemented using Websockets
 
 ## 😁 Technologies Used
 
