@@ -54,9 +54,12 @@ const PreviewPage = ({ match, location, user, room }) => {
         <div className="mt-5 w-full flex md:flex-row flex-col items-center justify-center">
           <button
             onClick={handleJoinMeeting}
-            className="flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-800 cursor-pointer select-none my-4 mx-2 sm:w-40 w-1/2 py-3 rounded-full  transform hover:scale-105 transition-all duration-200 ease-in-out active:scale-90"
+            className="group focus:bg-opacity-50 flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-800 cursor-pointer select-none my-4 mx-2 sm:w-40 w-1/2 py-3 rounded-full  transform hover:scale-105 transition-all duration-200 ease-in-out active:scale-90"
           >
-            Join
+            <i className="group-focus:block hidden material-icons animate-spin mr-2">
+              refresh
+            </i>
+            <span>Join</span>
           </button>
           <button
             onClick={handleEndPreview}

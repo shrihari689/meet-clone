@@ -18,7 +18,7 @@ module.exports = {
       backgroundColor: ["disabled"],
       cursor: ["disabled"],
       scale: ["active"],
-      display: ["group-hover"],
+      display: ["group-hover", "group-focus"],
     },
   },
   plugins: [],
