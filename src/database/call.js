@@ -1,95 +1,65 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { playIncomingMessageSound } from "../utils/sounds"
-import { Call, TABS } from "./entities"
+import { createSlice } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
+import { countUnreadMessages } from "../utils/general";
+import { Call, TABS } from "./entities";
 
 const callSlice = createSlice({
-    name: "Call",
-    initialState: Call,
-    reducers: {
-        setCallInfo: (state, { payload }) => {
-            state.refId = payload.refId
-            state.meetId = payload.meetId
-        },
-        setHostInfo: (state, { payload }) => {
-            state.hostId = payload.hostId
-            state.isHost = payload.isHost
-            state.isChatDisabled = payload.isChatDisabled
-        },
-        addMessage: (state, { payload }) => {
-            state.chats.push(payload)
-            const isUnseenState = state.isSidebarOpen !== TABS.CHAT
-            state.hasUnseenMessages = isUnseenState
-            if (isUnseenState)
-                playIncomingMessageSound()
-        },
-        updateParticipants: (state, { payload }) => {
-            const participants = Object.keys(payload).map(e => payload[e])
-            state.participants = participants
-            state.participants.sort()
-        },
-        addParticipant: (state, { payload }) => {
-            state.participants.push(payload)
-        },
-        removeParticipant: (state, { payload }) => {
-            state.participants = state.participants.filter(e => e.refId !== payload.refId)
-        },
-        updateParticipant: (state, { payload }) => {
-            state.participants = state.participants.filter(e => e.refId !== payload.refId)
-            state.participants.push(payload)
-            const isDiffUser = payload.refId !== state.refId
-            if (isDiffUser && payload.isHandRaised)
-                playIncomingMessageSound()
-        },
-        toggleMic: state => {
-            state.isMicOn = !state.isMicOn
-        },
-        toggleVideo: state => {
-            state.isCamOn = !state.isCamOn
-        },
-        addStream: (state, { payload }) => {
-            state.camStream = payload
-        },
-        removeStream: state => {
-            state.camStream = null
-        },
-        setIsSidebarOpen: (state, { payload }) => {
-            if (payload === TABS.CHAT)
-                state.hasUnseenMessages = false
-            if (state.isSidebarOpen === payload)
-                state.isSidebarOpen = TABS.NO_SIDEBAR;
-            else
-                state.isSidebarOpen = payload
-        },
-        updateMeetSettings: (state, { payload }) => {
-            const { isChatDisabled } = payload
-            if (isChatDisabled !== undefined)
-                state.isChatDisabled = isChatDisabled
-        },
-        toggleCaption: (state, { payload }) => {
-            state.isCaptionEnabled = payload
-        },
-        resetCall: _ => Call
-    }
-})
+  name: "Call",
+  initialState: Call,
+  reducers: {
+    setCallInfo: (state, { payload }) => {
+      if (!payload.room.isConnected && payload.room.roomState !== "Preview")
+        return Call;
+      state.room = payload.room;
+      state.peers = payload.peers;
+      state.tracks = payload.tracks;
+      const messages = payload.messages.byID;
+      state.messages = Object.keys(messages)
+        .map((e) => ({
+          ...messages[e],
+          time: dayjs(messages[e].time).format("hh:mm A"),
+        }))
+        .filter((e) => e.type === "chat");
+      if (!(state.pinnedParticipant in state.peers))
+        state.pinnedParticipant = null;
+      state.hasUnseenMessages = countUnreadMessages(state.messages) !== 0;
+    },
+    setIsSidebarOpen: (state, { payload }) => {
+      if (state.isSidebarOpen === payload) {
+        state.isSidebarOpen = TABS.NO_SIDEBAR;
+      } else {
+        state.isSidebarOpen = payload;
+      }
+    },
+    raiseHand: (state, { payload }) => {
+      state.handRaised[payload] = true;
+    },
+    lowerHand: (state, { payload }) => {
+      const newHandRaised = { ...state.handRaised };
+      delete newHandRaised[payload];
+      state.handRaised = newHandRaised;
+    },
+    lowerAllHands: (state, _) => {
+      state.handRaised = {};
+    },
+    pinParticipant: (state, { payload }) => {
+      if (state.pinnedParticipant === payload) {
+        state.pinnedParticipant = null;
+      } else {
+        state.pinnedParticipant = payload;
+      }
+    },
+    resetCall: (_) => Call,
+  },
+});
 
-export const
-    {
-        setCallInfo,
-        setHostInfo,
-        addMessage,
-        resetCall,
-        toggleMic,
-        toggleVideo,
-        toggleCaption,
-        addParticipant,
-        updateParticipant,
-        removeParticipant,
-        updateParticipants,
-        updateMeetSettings,
-        addStream,
-        removeStream,
-        setIsSidebarOpen,
-    } = callSlice.actions
-
+export const {
+  setCallInfo,
+  resetCall,
+  lowerHand,
+  raiseHand,
+  setIsSidebarOpen,
+  pinParticipant,
+} = callSlice.actions;
 
 export default callSlice;

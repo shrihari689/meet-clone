@@ -1,41 +1,38 @@
-import { useEffect } from "react";
-import { connect } from "react-redux";
-import { toggleVideo } from "../../../database/call";
-import { database } from "../../../utils/firebase";
+import React, { useState, useEffect } from "react";
+import { hmsActions } from "../../../utils/hms";
 
-const VideoButton = ({ isOn, setIsOn, meetId, refId }) => {
+const VideoButton = ({ localPeerVideo }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const isOn = localPeerVideo?.enabled;
 
-    useEffect(() => {
-        if (meetId && refId)
-            database.ref().child(meetId).child(refId).update({
-                isCamOn: isOn
-            })
-    }, [isOn]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (isOn) setIsLoading(false);
+  }, [isOn]);
 
-    const toggleCam = (_) => {
-        setIsOn()
-    }
+  const toggleCam = (_) => {
+    if (!isOn) setIsLoading(true);
+    hmsActions.setLocalVideoEnabled(!isOn);
+  };
 
-    return (
-        <div
-            title={"Video " + (isOn ? "Off" : "On")}
-            onClick={toggleCam}
-            className={"h-8 w-8 rounded-full cursor-pointer flex items-center justify-center mx-1 " + (!isOn ? " bg-red-700 hover:bg-red-900" : " bg-gray-700 hover:bg-gray-800")}>
-            <i className="google-material-icons" style={{ fontSize: '16px' }}>
-                {!isOn ? "videocam_off" : "videocam"}
-            </i>
-        </div>
-    );
-}
+  return (
+    <div
+      title={"Video " + (isOn ? "Off" : "On")}
+      onClick={toggleCam}
+      className={
+        "h-8 w-8 rounded-full cursor-pointer flex items-center justify-center mx-1 " +
+        (!isOn
+          ? " bg-red-700 hover:bg-red-900"
+          : " bg-gray-700 hover:bg-gray-800")
+      }
+    >
+      <i
+        className={"google-material-icons " + (isLoading ? "animate-spin" : "")}
+        style={{ fontSize: "16px" }}
+      >
+        {!isOn ? (isLoading ? "loop" : "videocam_off") : "videocam"}
+      </i>
+    </div>
+  );
+};
 
-const mapStateToProps = state => ({
-    isOn: state.call.isCamOn,
-    refId: state.call.refId,
-    meetId: state.call.meetId
-})
-
-const mapDispatchToProps = dispatch => ({
-    setIsOn: _ => dispatch(toggleVideo())
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(VideoButton);
+export default VideoButton;

@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { getDateTimeString } from '../../utils/time';
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
 
 const Time = (props) => {
+  const [currentTime, setCurrentTime] = useState(() =>
+    dayjs().format("hh:mm A")
+  );
 
-    const [currentTime, setCurrentTime] = useState(getDateTimeString().time)
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(dayjs().format("hh:mm A"));
+    }, 1000);
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentTime(getDateTimeString().time);
-        }, 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
-        return () => {
-            clearInterval(intervalId);
-        }
-    }, [])
-
-    return (
-        <div {...props}>{currentTime}</div>
-    );
-}
+  return <div {...props}>{currentTime}</div>;
+};
 
 export default Time;

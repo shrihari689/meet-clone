@@ -1,60 +1,55 @@
 import { useEffect } from "react";
 import { useRef } from "react";
+import { hmsActions } from "../../utils/hms";
 import MicAmplifyIcon from "./Icons/MicAmplifyIcon";
 
-const CallPeopleItem = ({ refId, name, isMicOn, isCamOn, image, currentRefId }) => {
+const CallPeopleItem = ({ people, audio, video }) => {
+  const camVideoRef = useRef(null);
+  const { user } = JSON.parse(people.customerDescription);
 
-    const camVideoRef = useRef();
+  const { name, image } = user;
 
-    useEffect(() => {
-        if (currentRefId && (currentRefId === refId)) {
-            if (isCamOn) {
-                if (camVideoRef.current && !camVideoRef.current.srcObject)
-                    navigator.mediaDevices
-                        .getUserMedia({ video: true, audio: true })
-                        .then(stream => {
-                            camVideoRef.current.srcObject = stream;
-                            camVideoRef.current.muted = true;
-                            camVideoRef.current.play();
+  const isMicOn = Boolean(audio?.enabled);
+  const isCamOn = Boolean(video?.enabled);
 
-                        }).catch(err => {
-                            console.log(err);
-                        })
-            } else {
-                const stream = camVideoRef.current.srcObject;
-                stream?.getTracks()?.forEach(track => {
-                    track.stop()
-                    stream.removeTrack(track)
-                })
-                camVideoRef.current.srcObject = null;
-            }
-        }
-    }, [isCamOn, isMicOn]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (isCamOn && video?.id) {
+      hmsActions.attachVideo(video.id, camVideoRef.current);
+    } else if (video?.id) {
+      hmsActions.detachVideo(video.id, camVideoRef.current);
+    }
+  }, [isCamOn, video]);
 
-    return (
-        <div
-            key={refId}
-            className="call-card flex flex-1 m-2 flex-col items-center justify-between bg-gray-800 p-3 rounded-md"
-        >
-            <div className="w-full flex justify-end">
-                <MicAmplifyIcon isOn={isMicOn} />
-            </div>
-            <div className="flex items-center justify-center">
-                <video
-                    className={(!isCamOn ? "hidden" : "rounded-md w-full h-full object-cover")}
-                    ref={camVideoRef}
-                />
-                <img
-                    className={isCamOn ? "hidden" : "h-18 w-18 rounded-full"}
-                    src={image}
-                    alt={name}
-                />
-            </div>
-            <div className="w-full flex justify-start text-gray-300 font-medium text-sm py-1">
-                {name}
-            </div>
-        </div>
-    );
-}
+  return (
+    <div
+      key={people.id}
+      className="call-card flex flex-1 m-2 flex-col items-center justify-between bg-gray-800 p-3 rounded-md"
+    >
+      <div className="w-full flex justify-end">
+        <MicAmplifyIcon isOn={isMicOn} />
+      </div>
+      <div className="flex flex-1 items-center justify-center">
+        <video
+          autoPlay
+          muted
+          playsInline
+          className={
+            !isCamOn ? "hidden" : "rounded-md w-full h-full object-cover"
+          }
+          ref={camVideoRef}
+        />
+        <img
+          referrerPolicy="no-referrer"
+          className={isCamOn ? "hidden" : "h-18 w-18 rounded-full"}
+          src={image}
+          alt={name}
+        />
+      </div>
+      <div className="w-full flex justify-start text-gray-300 font-medium text-sm py-1">
+        {people.isLocal ? "You" : name}
+      </div>
+    </div>
+  );
+};
 
 export default CallPeopleItem;
