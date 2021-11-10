@@ -1,43 +1,43 @@
 import { useState } from "react";
-import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { createNewMeeting } from "../../database/fires";
-import { generateNewMeetId } from "../../utils/validator";
+import { Redirect } from "react-router-dom";
+import { createNewMeeting } from "../../utils/hms";
 
-const NewMeetingButton = ({ currentUser }) => {
+const NewMeetingButton = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [room, setRoom] = useState({ meetId: "", token: "" });
 
-    const [isLoading, setIsLoading] = useState(false);
-    const pageRouter = useHistory();
-
-    const handleNewMeeting = (_) => {
-        setIsLoading(true);
-        const newId = generateNewMeetId()
-        createNewMeeting(newId, currentUser.id).then(_ => {
-            setIsLoading(false);
-            pageRouter.push(newId);
-        }).catch(_ => {
-            setIsLoading(false);
-        })
-    }
-
+  if (room.meetId) {
     return (
-        <button
-            disabled={isLoading}
-            onClick={handleNewMeeting}
-            className={"flex items-center text-white cursor-pointer select-none mt-2 ml-2 p-2 rounded-sm " + (isLoading ? "cursor-not-allowed bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-800")}>
-            {
-                isLoading ?
-                    <i className="material-icons animate-spin">sync</i>
-                    : <i className="material-icons">video_call</i>
-            }
-            <span className="ml-2 text-sm">New Meeting</span>
-        </button>
+      <Redirect
+        to={{
+          pathname: `/join/${room.meetId}`,
+          state: room,
+        }}
+      />
     );
-}
+  }
 
+  const handleNewMeeting = (_) => {
+    setIsLoading(true);
+    createNewMeeting()
+      .then((room) => setRoom(room))
+      .catch((err) => console.log(err));
+  };
 
-const mapStateToProps = state => ({
-    currentUser: state.auth
-})
+  return (
+    <button
+      disabled={isLoading}
+      onClick={handleNewMeeting}
+      className="flex items-center text-white cursor-pointer select-none mt-2 ml-2 p-2 rounded-sm bg-indigo-600 hover:bg-indigo-800 disabled:cursor-not-allowed disabled:bg-indigo-400"
+    >
+      {isLoading ? (
+        <i className="material-icons animate-spin">sync</i>
+      ) : (
+        <i className="material-icons">video_call</i>
+      )}
+      <span className="ml-2 text-sm">New Meeting</span>
+    </button>
+  );
+};
 
-export default connect(mapStateToProps)(NewMeetingButton);
+export default NewMeetingButton;
